@@ -38,6 +38,15 @@ local CamScaleX = 1.03 -- Escala horizontal (default 1.03)
 local CamScaleY = 1.03 -- Escala vertical (default 1.03)
 
 
+-- | Intro [Test] |
+local AnimMini = 2 -- Animaciones de entrada: 0 = normal, 2 = izquierda a derecha, 3 = derecha a izquierda, 4 = arriba a abajo, 5 = abajo a arriba, 6 Cara, 7 Centro.
+local colorMode = 2 -- 1 = solo un color, 2 = ajedrez, 3 = aleatorio, 4 = columnas de 2 colores, 5 = Random color custom.
+local singleColor = '000000' -- Color unico
+local color1 = 'FFFFFF' -- Color primario
+local color2 = '000000' -- Color secundario
+local customColors = {'000000','FFFFFF','FF0C00'} -- Random color Custom
+
+
 -- | Configuración de reducción de salud del oponente |
 local healthOp = true -- Activar o desactivar la reducción de salud [default true]
 local QuitaV = 0.012 -- Reducción de salud [default 0.012]
@@ -237,6 +246,13 @@ function onSongStart()
         removeLuaText('ScoreMini')
         removeLuaText('MissesMini')
     end
+    if AnimMini == 6 then
+        animateSmileFace()
+    elseif AnimMini == 7 then
+        animateFromCenterOut()
+    else
+        standardAnimation()
+    end
 end
 function onCreate()
     makeLuaText('ScoreMini','0')
@@ -256,6 +272,7 @@ function onCreate()
     end
     onVariables()
     defaultOptions()
+    onIntro()
 end
 function defaultOptions()
     MiddlescrollDefault = getPropertyFromClass('backend.ClientPrefs','data.middleScroll')
@@ -296,6 +313,127 @@ function ObjectOrderPost()
     setObjectOrder('ScoreMini',getObjectOrder('scoreTxt') + 1)
     setObjectOrder('MissesMini',getObjectOrder('scoreTxt') + 1)
 end
+
+
+local size, cols, rows = 40, 32, 18
+local facePixels = {
+{11,6},{12,6},{13,6},
+{11,7},{12,7},{13,7},            {17,7},{18,7},{19,7},
+
+{11,10},                                      {19,10},
+     {12,11},                              {18,11},
+        {13,12},{14,12},{15,12},{16,12},{17,12}
+}
+function onIntro()
+    for i = 0,cols - 1 do
+        for j = 0,rows - 1 do
+            local id = 'sq'..(i * rows + j)
+            local color = color2
+            local isFacePixel = false
+            if AnimMini == 6 then
+                for _, pos in ipairs(facePixels) do
+                    if pos[1] == i and pos[2] == j then
+                        color = 'CCCCCC'
+                        isFacePixel = true
+                        break
+                    end
+                end
+            end
+            if not isFacePixel then
+                if colorMode == 1 then
+                    color = singleColor
+                elseif colorMode == 2 then
+                    color = ((i + j) % 2 == 0) and color1 or color2
+                elseif colorMode == 3 then
+                    color = string.format('%06X',math.random(0x000000, 0xFFFFFF))
+                elseif colorMode == 4 then
+                    color = (i % 2 == 0) and color1 or color2
+                elseif colorMode == 5 then
+                    color = customColors[math.random(#customColors)]
+                end
+            end
+
+            makeLuaSprite(id,nil,i * size,j * size)
+            makeGraphic(id,size,size,color)
+            setProperty(id..'.camera',instanceArg('camOther'),false,true)
+            addLuaSprite(id,true)
+        end
+    end
+end
+function animateSmileFace()
+local facePixels = {
+{11,6},{12,6},{13,6},
+{11,7},{12,7},{13,7},            {17,7},{18,7},{19,7},
+
+{11,10},                                      {19,10},
+     {12,11},                              {18,11},
+        {13,12},{14,12},{15,12},{16,12},{17,12}
+}
+    local baseTime,delayInc,alphaDelay = 0.2,0.03,0.15
+    for _,pos in ipairs(facePixels) do
+        local id = 'sq'..(pos[1] * rows + pos[2])
+        doTweenX(id..'_scX',id..'.scale',0.01,baseTime)
+        doTweenY(id..'_scY',id..'.scale',0.01,baseTime)
+        runTimer(id..'_fade',alphaDelay)
+    end
+    for i = 0,cols - 1 do
+        for j = 0,rows - 1 do
+            local id = 'sq'..(i * rows + j)
+            local isFacePixel = false
+            for _, pos in ipairs(facePixels) do
+                if pos[1] == i and pos[2] == j then
+                    isFacePixel = true
+                    break
+                end
+            end
+            if not isFacePixel then
+                local delay = (i + j) * delayInc + baseTime
+                doTweenX(id..'_scX',id..'.scale',0.01, delay)
+                doTweenY(id..'_scY',id..'.scale',0.01, delay)
+                runTimer(id..'_fade',delay + alphaDelay)
+            end
+        end
+    end
+end
+function animateFromCenterOut()
+    local centerX,centerY = 1280 / 2, 720 / 2
+    local baseTime,delayInc, alphaDelay = 0.03,0.002,0.1
+    local squares = {}
+    for i = 0,cols - 1 do
+        for j = 0,rows - 1 do
+            local id = 'sq'..(i * rows + j)
+            local x,y = i * size + size / 2,j * size + size / 2
+            local dist = math.sqrt((x - centerX)^2 + (y - centerY)^2)
+            table.insert(squares,{id = id,delay = dist * delayInc})
+        end
+    end
+    for _,square in ipairs(squares) do
+        local scaleTime = baseTime + square.delay
+        doTweenX(square.id..'_scX',square.id..'.scale',0.01,scaleTime)
+        doTweenY(square.id..'_scY',square.id..'.scale',0.01,scaleTime)
+        runTimer(square.id..'_fade',scaleTime + alphaDelay)
+    end
+end
+function standardAnimation()
+    local baseTime = (AnimMini == 0) and 0.5 or 0.15
+    local delayInc = (AnimMini == 0) and 0 or 0.03
+    local alphaDelay = (AnimMini == 0) and 0.15 or 0.07
+    local limit = (AnimMini < 4) and 31 or 17
+    local isColumn = (AnimMini < 4)
+    local reverse = (AnimMini == 3) or (AnimMini == 5)
+    for i = 0,limit do
+        local index = reverse and (limit - i) or i
+        local delay = index * delayInc
+        local scaleTime = baseTime + delay
+        for j = 0, (isColumn and 17 or 31) do
+            local id = 'sq'..(isColumn and (i * 18 + j) or (j * 18 + i))
+            doTweenX(id..'_scX',id..'.scale',0.01,scaleTime)
+            doTweenY(id..'_scY',id..'.scale',0.01,scaleTime)
+            runTimer(id..'_fade',delay + alphaDelay)
+        end
+    end
+end
+
 local activeTexts = {}
 local maxTexts, textDuration,yOffsetStep,baseX,baseY,offsetXNewText = 6,5,25,0,200,400
 local eventCooldown = {}
@@ -346,6 +484,10 @@ function onTimerCompleted(t)
     if t:find('removeOldText') then
         local textTag = t:gsub('removeOldText','')
         removeLuaText(textTag,true)
+    end
+    if t:find('_fade') then
+        local id = tag:gsub('_fade','')
+        doTweenAlpha(id..'_alpha',id,0,0.5)
     end
 end
 local ScoreActual = 0
