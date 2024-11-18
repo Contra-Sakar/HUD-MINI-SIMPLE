@@ -2,7 +2,7 @@
 [Español]
     |HUD MINI SIMPLE v4 | P-Slice Engine | |LuaXdea|
 
-Este script te permite personalizar el HUD (la interfaz) en Psych Engine de forma sencilla "Creo". Añade opciones como animación de los iconos, ajustes de la cámara y reducción de salud del oponente. Este es un Pre-lanzamiento de la v4 está mayormente hecha en el P-Slice Engine, aunque también puede funcionar en el Psych Engine Normal "creo".
+Este script te permite personalizar el HUD (la interfaz) en Psych Engine de forma sencilla "Creo". Añade opciones como animación de los iconos, ajustes de la cámara y reducción de salud del oponente. Esta v4 es la última actualización por estas semanas se volvera a actualizar el script en fines de diciembre o inicios de enero del 2025.
 
 [Youtube]: https://youtube.com/@lua-x-dea?si=vH4ommC_t3CGrDqn
 [Gamebanana]: https://gamebanana.com/mods/502653
@@ -40,12 +40,13 @@ local CamScaleY = 1.03 -- Escala vertical (default 1.03)
 
 -- | Intro |
 local IntroLua = true -- Activa una intro que se ve cuando inicia cualquier nivel (default false)
-local AnimMini = 2 -- Animaciones de entrada: 0 = normal, 2 = izquierda a derecha, 3 = derecha a izquierda, 4 = arriba a abajo, 5 = abajo a arriba, 6 Cara, 7 Centro. (default 2)
+local AnimMini = 2 -- Animaciones de entrada: 0 = normal, 2 = izquierda a derecha, 3 = derecha a izquierda, 4 = arriba a abajo, 5 = abajo a arriba, 6 = Cara, 7 = Centro. (default 2)
 local ColorMode = 2 -- 1 = solo un color, 2 = ajedrez, 3 = aleatorio, 4 = columnas de 2 colores, 5 = Random color custom. (default 2)
 local SingleColor = '000000' -- Color unico (default Hex 000000 (Negro))
 local color1 = 'FFFFFF' -- Color primario (default Hex FFFFFF (Blanco))
 local color2 = '000000' -- Color secundario (default Hex 000000 (Negro))
-local customColors = {'000000','FFFFFF','FF0C00'} -- Random color Custom (default Hex {'000000','FFFFFF','FF0C00'})
+local customColors = {'000000','FFFFFF','FF0C00'} -- Random color Custom (default Hex {'000000','FFFFFF','FF0C00'}) [Requiere ColorMode = 5]
+local ColorFace = 'CCCCCC' -- Puedes elegir el color que va ser la cara pixel (default Hex CCCCCC) [Requiere AnimMini = 6]
 local CamIntro = 'camHUD' -- La cámara donde sera la Intro recomendable [camHUD o camOther] (default camHUD)
 
 
@@ -93,7 +94,7 @@ local angle_down = 0
 
 local function configureHUD()
     if CoverMode then
-        setProperty('comboGroup.alpha',0.3)
+        setProperty('comboGroup.alpha',0.2)
         setProperty('cpuControlled',true)
     local CoverModeTabla = {'iconP1','iconP2','healthBar','healthBarBG','timeBar','timeBarBG','timeTxt'}
         for _,ModeAlpha in pairs(CoverModeTabla) do setProperty(ModeAlpha..'.alpha',0.5) end
@@ -337,7 +338,7 @@ function onIntro()
             if AnimMini == 6 then
                 for _, pos in ipairs(facePixels) do
                     if pos[1] == i and pos[2] == j then
-                        color = 'CCCCCC'
+                        color = ColorFace
                         isFacePixel = true
                         break
                     end
