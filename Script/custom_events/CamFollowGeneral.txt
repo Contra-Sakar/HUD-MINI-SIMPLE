@@ -1,0 +1,16 @@
+| Evento: CamFollowGeneral |
+Configuracion general.
+- Value 1, Value 2:
+  - AS: AngleSwitch. Valores: true, false.
+  - CS: Velocidad de la cámara. Valores: número.
+  - FC: followCharacters. Valores: true, false.
+  - IO: Desplazamientos individuales. Valores: true, false.
+  - GO: Desplazamiento General. Valores: número.
+  - AT: Tiempo del ángulo. Valores: número.
+  - AL: Ángulo izquierdo. Valores: número.
+  - AR: Ángulo derecho. Valores: número.
+  - AU: Ángulo arriba. Valores: número.
+  - AD: Ángulo abajo. Valores: número.
+Ejemplos:
+Value1: AS, Value2: true
+Value1: CS, Value2: 1.8
