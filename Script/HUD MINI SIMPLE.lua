@@ -1,6 +1,6 @@
 --[[ 
 [Español]
-    |HUD MINI SIMPLE | P-Slice Engine 2.0.1 | |LuaXdea|
+    |HUD MINI SIMPLE | P-Slice Engine | |LuaXdea|
 
 Este script te permite personalizar el HUD (la interfaz) en Psych Engine de forma sencilla "Creo". Añade opciones como animación de los iconos, ajustes de la cámara y reducción de salud del oponente. Este es un Pre-lanzamiento de la v4 está mayormente hecha en el P-Slice Engine, aunque también puede funcionar en el Psych Engine Normal "creo".
 
@@ -320,7 +320,7 @@ function customPrint(message)
     setTextFont(textTag,TextoFont or 'vcr.ttf')
     setProperty(textTag..'.alpha',0)
     if version == '1.0' then
-    setProperty(textTag..'.camera',instanceArg('camOther'),false,true) -- Psych Engine 1.0 [Fix]
+    setProperty(textTag..'.camera',instanceArg('camOther'),false,true)
     else
     setObjectCamera(textTag,'camOther')
     end
