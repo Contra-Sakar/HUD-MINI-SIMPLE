@@ -66,7 +66,7 @@ local GeneralOffset = 17 -- Reemplaza a los offsets de dad,boyfriend y gf si el 
 local AngleSwitch = false -- Inclinar Cámara [default false]
 local angleTime = 0.8 -- Velocidad de Angle [default 0.8]
 local followCharacters = true -- CamFollow [default true]
-local CemeraSpeedOff = false -- Puedes desactivar el cameraSpeed en el script si ya tienes en otro script que ya hace lo mismo, es para evitar problemas si otro script esta usando el cameraSpeed (default false)
+local CameraSpeedOff = false -- Puedes desactivar el cameraSpeed en el script si ya tienes en otro script que ya hace lo mismo, es para evitar problemas si otro script esta usando el cameraSpeed (default false)
 local cameraSpeed = 1 -- Velocidad de CamFollow [default 1]
 
 -- | Posiciones de las cámaras | [Configurado para Test]
@@ -588,7 +588,7 @@ function CamDefault()
     camY_gfEvent = CustomCam and camY_gf or camY_gfDefault
 end
 function onCamFollowPos()
-    if not CemeraSpeedOff then
+    if not CameraSpeedOff then
     setProperty('cameraSpeed',cameraSpeed)
     end
     if followCharacters then
@@ -670,10 +670,12 @@ function onEvent(n,v1,v2)
     if n == 'CamFollowGeneral' then
         if v1 == 'as' then  -- AngleSwitch
             AngleSwitch = B
-        elseif v1 == 'cs' then  -- cameraSpeed
+        elseif v1 == 'cf' then -- CameraSpeedOff
+            CameraSpeedOff = B
+        elseif v1 == 'cs' then -- cameraSpeed
             cameraSpeed = tonumber(v2)
-        elseif v1 == 'fd' then
-            FlipDadX = B -- FlipDadX
+        elseif v1 == 'fd' then -- FlipDadX
+            FlipDadX = B
         elseif v1 == 'fc' then  -- followCharacters
             followCharacters = B
         elseif v1 == 'io' then  -- IndividualOffsets
@@ -790,6 +792,7 @@ end
 Configuracion general.
 - Value 1, Value 2:
   - AS: AngleSwitch. Valores: true, false.
+  - CF: CameraSpeedOff, Valores: true, false
   - CS: Velocidad de la cámara. Valores: número.
   - FD: FlipDadX, Valores: true, false
   - FC: followCharacters. Valores: true, false.
