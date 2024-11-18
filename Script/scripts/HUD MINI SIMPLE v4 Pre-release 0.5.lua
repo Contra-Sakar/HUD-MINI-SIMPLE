@@ -194,6 +194,7 @@ local VariablesExtra = {
     {'AngleSwitch',AngleSwitch},
     {'angleTime',angleTime},
     {'followCharacters',followCharacters},
+    {'CemeraSpeedOff',CemeraSpeedOff},
     {'cameraSpeed',cameraSpeed},
     {'camX_opponent',camX_opponentEvent},
     {'camY_opponent',camY_opponentEvent},
