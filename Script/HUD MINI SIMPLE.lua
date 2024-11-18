@@ -1,6 +1,6 @@
 --[[ 
 [Español]
-    |HUD MINI SIMPLE v4 Pre-release | P-Slice Engine 2.0.1 | |LuaXdea|
+    |HUD MINI SIMPLE | P-Slice Engine 2.0.1 | |LuaXdea|
 
 Este script te permite personalizar el HUD (la interfaz) en Psych Engine de forma sencilla "Creo". Añade opciones como animación de los iconos, ajustes de la cámara y reducción de salud del oponente. Este es un Pre-lanzamiento de la v4 está mayormente hecha en el P-Slice Engine, aunque también puede funcionar en el Psych Engine Normal "creo".
 
@@ -668,32 +668,4 @@ Configura el robo de vida del oponente.
 Ejemplos:
 Value1: HO, Value2: false
 Value1: LD, Value2: 0.6
-]]
-
-
-
-
---[[
-    | HUD MINI SIMPLE [ v4 [Pre-release] [P-Slice Engine ] ] |
-  [NUEVAS COSAS]
-  - [TimeScoreMini] Puedes cambiar el tiempo que va tardar en que tomara el ScoreMini en actualizare a la nueva puntuación.
-  - [ColorScoreMini] Ahora puedes cambiar el color que se mostrara cuando el ScoreMini se actualice.
-  - [Variables Extra] Se agrego algunas variables extra que son las siguientes:
-        - health | Obtiene la salud actual.
-        - versionPS | Obtiene la versión de P-Slice Engine.
-        - versionBase | Obtiene la versión del FNF base.
-        - iconP1Name | Obtiene el nombre del ícono de salud del personaje boyfriend.
-        - iconP2Name | Obtiene el nombre del ícono de salud del personaje dad.
-  - [FlipDadX] Cuando FlipDadX esta en true, LEFT aumenta X y RIGHT la disminuye; de lo contrario, LEFT disminuye X y RIGHT la aumenta.
-  - [MiddleScrollToggle] Te permite deneger la activación del middlescroll en los ajustes de Psych Engine.
-  - [CoverMode] El modo cover te permite hacer que las cosas del HUD MINI SIMPLE y unas cosas mas bajane su opacidad aún más baja para que no molesten tanto.
-  [CAMBIOS]
-  - [configureHUD] Se quito la tabla que se usaba.
-  - [angle_up] -5 -> 0
-  - [angle_down] 5 -> 0
-  - [GeneralOffset] 15 -> 20
-
-        | Nada es usable en evento aún |
-    | Este versión está pensada para el P-Slice Engine [2.0.1]|
-  Algo es seguro y es que este versión de Pre-lanzamiento no es para la versión 0.6.3 de Psych Engine algunas cosas puede que no funcionen luego ya en la versión final de la v4 los haré funcionar.
 ]]
