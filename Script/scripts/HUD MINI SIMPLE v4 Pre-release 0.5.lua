@@ -1,11 +1,12 @@
 --[[ 
 [Español]
-    |HUD MINI SIMPLE v4 | P-Slice Engine | |LuaXdea|
+    |HUD MINI SIMPLE v4 Pre-release 0.5 | Psych Engine 0.6.3 -> 1.0 | |LuaXdea|
 
-Este script te permite personalizar el HUD (la interfaz) en Psych Engine de forma sencilla "Creo". Añade opciones como animación de los iconos, ajustes de la cámara y reducción de salud del oponente. Esta v4 es la última actualización por estas semanas se volvera a actualizar el script en fines de diciembre o inicios de enero del 2025.
+Este script te permite personalizar el HUD (la interfaz) en Psych Engine de forma sencilla "Creo". Añade opciones como animación de los iconos, ajustes de la cámara y reducción de salud del oponente. Esta v4 es la última actualización por este mes se volvera a actualizar el script completo en fines de diciembre o inicios de enero del 2025.
 
 [Youtube]: https://youtube.com/@lua-x-dea?si=vH4ommC_t3CGrDqn
 [Gamebanana]: https://gamebanana.com/mods/502653
+[Github]: https://github.com/Contra-Sakar/HUD-MINI-SIMPLE
 ]]
 
 -- | HUD MINI SIMPLE | Ajustes |
@@ -22,7 +23,7 @@ local CoverMode = false -- Activa el modo Cover donde todo el HUD MINI SIMPLE y 
 
 -- | ScoreMini |
 local ScoreTxtMini = true -- Opción para que se vean el ScoreMini y MissesMini [default true]
-local TimeScoreMini = 0.4 -- El tiempo que tardará en llegar a la nueva puntuación [defecto 0.4]
+local TimeScoreMini = 0.3 -- El tiempo que tardará en llegar a la nueva puntuación [defecto 0.3]
 local ColorScoreMini = '00FF00' -- El color que se volverá el ScoreMini cuando se gana puntos [defecto Hex 00FF00 (Verde)]
 
 
@@ -63,8 +64,9 @@ local FlipDadX = false -- Cuando FlipDadX esta en true, LEFT aumenta X y RIGHT l
 local IndividualOffsets = false -- Es para si quieres usar los Offsets por individual cada uno [default false]
 local GeneralOffset = 17 -- Reemplaza a los offsets de dad,boyfriend y gf si el IndividualOffsets está en false [default 17]
 local AngleSwitch = false -- Inclinar Cámara [default false]
-local angleTime = 1 -- Velocidad de Angle [default 1]
+local angleTime = 0.8 -- Velocidad de Angle [default 0.8]
 local followCharacters = true -- CamFollow [default true]
+local CemeraSpeedOff = false -- Puedes desactivar el cameraSpeed en el script si ya tienes en otro script que ya hace lo mismo, es para evitar problemas si otro script esta usando el cameraSpeed (default false)
 local cameraSpeed = 1 -- Velocidad de CamFollow [default 1]
 
 -- | Posiciones de las cámaras | [Configurado para Test]
@@ -153,6 +155,7 @@ end
 2. iconP1Name | Obtiene el nombre del ícono de salud del personaje boyfriend.
 
 3. iconP2Name | Obtiene el nombre del ícono de salud del personaje dad.
+    Se agregaran mas varibles y útiles en un futuro por el momento esto es todo.
 ]]
 local VariablesExtra = {
     {'health',getHealth},
@@ -338,8 +341,6 @@ function ObjectOrderPost()
     setObjectOrder('ScoreMini',getObjectOrder('scoreTxt') + 1)
     setObjectOrder('MissesMini',getObjectOrder('scoreTxt') + 1)
 end
-
-
 local size,cols,rows = 40,32,18
 local facePixels = {
 {11,6},{12,6},{13,6},
@@ -586,7 +587,9 @@ function CamDefault()
     camY_gfEvent = CustomCam and camY_gf or camY_gfDefault
 end
 function onCamFollowPos()
+    if not CemeraSpeedOff then
     setProperty('cameraSpeed',cameraSpeed)
+    end
     if followCharacters then
         local character = 'dad'
         if gfSection then
@@ -668,6 +671,8 @@ function onEvent(n,v1,v2)
             AngleSwitch = B
         elseif v1 == 'cs' then  -- cameraSpeed
             cameraSpeed = tonumber(v2)
+        elseif v1 == 'fd' then
+            FlipDadX = B -- FlipDadX
         elseif v1 == 'fc' then  -- followCharacters
             followCharacters = B
         elseif v1 == 'io' then  -- IndividualOffsets
@@ -785,6 +790,7 @@ Configuracion general.
 - Value 1, Value 2:
   - AS: AngleSwitch. Valores: true, false.
   - CS: Velocidad de la cámara. Valores: número.
+  - FD: FlipDadX, Valores: true, false
   - FC: followCharacters. Valores: true, false.
   - IO: Desplazamientos individuales. Valores: true, false.
   - GO: Desplazamiento General. Valores: número.
