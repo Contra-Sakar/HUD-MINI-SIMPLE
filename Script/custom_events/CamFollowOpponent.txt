@@ -1,0 +1,12 @@
+| Evento: CamFollowOpponent |
+Configura la cámara para seguir al oponente (dad).
+- Value 1, Value 2:
+  - X: Posición X. Usa "Add" en Value 1 para sumar en Value 2.
+  - Y: Posición Y. Usa "Add" en Value 1 para sumar en Value 2.
+  - OF: Desplazamiento. Valores: número.
+Ejemplos:
+Value 1: X, Value 2: 650
+Value 1: X,Add, Value 2: 40
+Value 1: Y, Value 2: 650
+Value 1: Y,Add, Value 2: 20
+Value 1: OF, Value 2: 15

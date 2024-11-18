@@ -1,0 +1,12 @@
+| Evento: LifeDrain |
+Configura el robo de vida del oponente.
+- Value 1, Value 2:
+  - HO: healthOp. Valores: true, false.
+  - QV: Quita vida. Valores: número.
+  - LD: Limite de Vida. Valores: número.
+  - PV: PocaVida. Valores: true, false.
+Ejemplos:
+Value1: HO, Value2: false
+Value1: QV, Value2: 0.05
+Value1: LD, Value2: 0.6
+Value1: PV, Value2: false
