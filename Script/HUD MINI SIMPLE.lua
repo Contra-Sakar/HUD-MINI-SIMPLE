@@ -12,8 +12,8 @@ Este script te permite personalizar el HUD (la interfaz) en Psych Engine de form
 -- | True: Activado | false: Desactivado |
 
 -- | Ajustes de personalización |
-local IconAnim = false -- Animación de iconos [default false]
-local IconAnimExtra = true -- Animación extra para los iconos [default true]
+local IconAnim = true -- Animación de iconos [default true]
+local IconAnimExtra = false -- Animación extra para los iconos [default false]
 local MiddlescrollON = true -- HUD personalizado para middlescroll [default true]
 local MiddleScrollToggle = false -- Puedes denegar que se active el middlescroll [default false]
 local HideBotplayTxt = true -- Opción para ocultar el texto de botplay [default true]
@@ -34,7 +34,7 @@ local TextoFont = 'MAHAWA__.TTF' -- Aquí puedes elegir que fuente de letra quie
 -- | Escala de cámaras |
 local CamScale = false -- Es para aumentar la escala de las camaras (default false)
 local CamerasScale = {'camGame','camHUD','camOther'} -- Elige las camaras que quieres cambiar su escala (default {'camGame','camHUD','camOther'} )
-local CamScaleX = 1.05 -- Escala horizontal (default 1.05)
+local CamScaleX = 1.03 -- Escala horizontal (default 1.03)
 local CamScaleY = 1.03 -- Escala vertical (default 1.03)
 
 
@@ -49,7 +49,7 @@ local PocaVida = true -- El icono del bf parpadea cuando la vida es por debajo d
 local CustomCam = false -- Si quieres usar la poción de la cámara por defecto de los personajes (false) o personalizada (true) [default false] [beta]
 local FlipDadX = false -- Cuando FlipDadX esta en true, LEFT aumenta X y RIGHT la disminuye; de lo contrario, LEFT disminuye X y RIGHT la aumenta [default false] [Test]
 local IndividualOffsets = false -- Es para si quieres usar los Offsets por individual cada uno [default false]
-local GeneralOffset = 20 -- Reemplaza a los offsets de dad,boyfriend y gf si el IndividualOffsets está en false [default 20]
+local GeneralOffset = 17 -- Reemplaza a los offsets de dad,boyfriend y gf si el IndividualOffsets está en false [default 17]
 local AngleSwitch = false -- Inclinar Cámara [default false]
 local angleTime = 1 -- Velocidad de Angle [default 1]
 local followCharacters = true -- CamFollow [default true]
@@ -69,7 +69,7 @@ local camY_gf = 450
     
 -- | Offsets de las cámaras |
 -- Offset: Define hasta dónde puede desplazarse la cámara al seguir a los personajes.
-local offset_opponent = 25
+local offset_opponent = 20
 local offset_player = 20
 local offset_gf = 25
 
@@ -82,7 +82,7 @@ local angle_down = 0
 
 local function configureHUD()
     if CoverMode then
-        setProperty('comboGroup.alpha',0.2)
+        setProperty('comboGroup.alpha',0.3)
         setProperty('cpuControlled',true)
     local CoverModeTabla = {'iconP1','iconP2','healthBar','healthBarBG','timeBar','timeBarBG','timeTxt'}
         for _,ModeAlpha in pairs(CoverModeTabla) do setProperty(ModeAlpha..'.alpha',0.5) end
