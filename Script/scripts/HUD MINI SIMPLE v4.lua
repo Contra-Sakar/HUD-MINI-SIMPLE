@@ -281,7 +281,7 @@ end
 function defaultOptions()
     if version == '0.6.3' then
     MiddlescrollDefault = getPropertyFromClass('ClientPrefs','middleScroll')
-    SplashAlpha = getProperty('grpNoteSplashes.alpha')
+    SplashAlpha = getPropertyFromGroup('grpNoteSplashes',0,'alpha')
     if MiddleScrollToggle then
     setPropertyFromClass('ClientPrefs','middleScroll',false)
     else
@@ -299,9 +299,13 @@ function defaultOptions()
     setPropertyFromClass('backend.ClientPrefs','data.splashAlpha',CoverMode and 0.3 or SplashAlpha)
     end
 end
+function CoverModeSplash()
+    for i = 0,getProperty('grpNoteSplashes.length') - 1 do
+setPropertyFromGroup('grpNoteSplashes',i,'alpha',CoverMode and 0.3 or SplashAlpha)
+    end
+end
 function onDestroy()
     if version == '0.6.3' then
-    setProperty('grpNoteSplashes.alpha',CoverMode and 0.3 or SplashAlpha)
     setPropertyFromClass('ClientPrefs','middleScroll',MiddlescrollDefault)
     else
     setPropertyFromClass('backend.ClientPrefs','data.splashAlpha',SplashAlpha)
@@ -320,6 +324,7 @@ end
 function onUpdate(elapsed)
     InfoEventUpdate(elapsed)
     onVariablesUpdate(elapsed)
+    CoverModeSplash()
 end
 function onUpdatePost(elapsed)
     configureHUD()
