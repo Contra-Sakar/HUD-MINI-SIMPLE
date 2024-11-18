@@ -279,18 +279,34 @@ function onCreate()
     onIntro()
 end
 function defaultOptions()
+    if version == '0.6.3' then
+    MiddlescrollDefault = getPropertyFromClass('ClientPrefs','middleScroll')
+    SplashAlpha = getProperty('grpNoteSplashes.alpha')
+    if MiddleScrollToggle then
+    setPropertyFromClass('ClientPrefs','middleScroll',false)
+    else
+    setPropertyFromClass('ClientPrefs','middleScroll',MiddlescrollDefault)
+    end
+    setProperty('grpNoteSplashes.alpha',CoverMode and 0.3 or SplashAlpha)
+    else
     MiddlescrollDefault = getPropertyFromClass('backend.ClientPrefs','data.middleScroll')
-    NotesAlpha = getPropertyFromClass('backend.ClientPrefs','data.splashAlpha')
+    SplashAlpha = getPropertyFromClass('backend.ClientPrefs','data.splashAlpha')
     if MiddleScrollToggle then
     setPropertyFromClass('backend.ClientPrefs','data.middleScroll',false)
     else
     setPropertyFromClass('backend.ClientPrefs','data.middleScroll',MiddlescrollDefault)
     end
-    setPropertyFromClass('backend.ClientPrefs','data.splashAlpha',CoverMode and 0.3 or NotesAlpha)
+    setPropertyFromClass('backend.ClientPrefs','data.splashAlpha',CoverMode and 0.3 or SplashAlpha)
+    end
 end
 function onDestroy()
-    setPropertyFromClass('backend.ClientPrefs','data.splashAlpha',NotesAlpha)
+    if version == '0.6.3' then
+    setProperty('grpNoteSplashes.alpha',CoverMode and 0.3 or SplashAlpha)
+    setPropertyFromClass('ClientPrefs','middleScroll',MiddlescrollDefault)
+    else
+    setPropertyFromClass('backend.ClientPrefs','data.splashAlpha',SplashAlpha)
     setPropertyFromClass('backend.ClientPrefs','data.middleScroll',MiddlescrollDefault)
+    end
 end
 function onCreatePost()
     CamDefault()
