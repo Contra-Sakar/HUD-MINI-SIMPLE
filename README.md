@@ -34,7 +34,7 @@ Este documento explica de manera simple qué hace cada configuración y opción 
 
 - **`CoverMode`**  
   Activa un modo "Cover" que reduce la opacidad del HUD y activa automáticamente el botplay.  
-  *Por defecto*: `false`. *(En pruebas)*
+  *Por defecto*: `false`.
 
 ---
 
@@ -119,7 +119,7 @@ Este documento explica de manera simple qué hace cada configuración y opción 
 
 - **`FlipDadX`**  
   Cambia cómo se mueve la cámara horizontalmente al presionar izquierda o derecha.  
-  *Por defecto*: `false`. *(En pruebas)*
+  *Por defecto*: `false`.
 
 - **`IndividualOffsets`**  
   Permite usar offsets individuales para cada personaje.  
