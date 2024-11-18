@@ -1,6 +1,6 @@
 --[[ 
 [Español]
-    |HUD MINI SIMPLE | P-Slice Engine | |LuaXdea|
+    |HUD MINI SIMPLE v4 | P-Slice Engine | |LuaXdea|
 
 Este script te permite personalizar el HUD (la interfaz) en Psych Engine de forma sencilla "Creo". Añade opciones como animación de los iconos, ajustes de la cámara y reducción de salud del oponente. Este es un Pre-lanzamiento de la v4 está mayormente hecha en el P-Slice Engine, aunque también puede funcionar en el Psych Engine Normal "creo".
 
@@ -138,18 +138,12 @@ end
     | Variables Extra |
 1. health | Obtiene la salud actual.
 
-2. versionPS | Obtiene la versión de P-Slice Engine.
+2. iconP1Name | Obtiene el nombre del ícono de salud del personaje boyfriend.
 
-3. versionBase | Obtiene la versión del FNF base.
-
-4. iconP1Name | Obtiene el nombre del ícono de salud del personaje boyfriend.
-
-5. iconP2Name | Obtiene el nombre del ícono de salud del personaje dad.
+3. iconP2Name | Obtiene el nombre del ícono de salud del personaje dad.
 ]]
 local VariablesExtra = {
     {'health',getHealth},
-    {'versionPS',function() return getPropertyFromClass('states.MainMenuState','pSliceVersion') end},
-    {'versionBase',function() return getPropertyFromClass('states.MainMenuState','funkinVersion') end},
     {'iconP1Name',function() return getProperty('boyfriend.healthIcon') end},
     {'iconP2Name',function() return getProperty('dad.healthIcon') end},
     {'IconAnim',IconAnim},
@@ -255,6 +249,15 @@ function onCreate()
     setProperty('MissesMini.alpha',0)
     addLuaText('MissesMini')
 
+    if healthOp then
+    setProperty('guitarHeroSustains',false)
+    else
+    setProperty('guitarHeroSustains',true)
+    end
+    onVariables()
+    defaultOptions()
+end
+function defaultOptions()
     MiddlescrollDefault = getPropertyFromClass('backend.ClientPrefs','data.middleScroll')
     NotesAlpha = getPropertyFromClass('backend.ClientPrefs','data.splashAlpha')
     if MiddleScrollToggle then
@@ -263,12 +266,6 @@ function onCreate()
     setPropertyFromClass('backend.ClientPrefs','data.middleScroll',MiddlescrollDefault)
     end
     setPropertyFromClass('backend.ClientPrefs','data.splashAlpha',CoverMode and 0.3 or NotesAlpha)
-    if healthOp then
-    setProperty('guitarHeroSustains',false)
-    else
-    setProperty('guitarHeroSustains',true)
-    end
-    onVariables()
 end
 function onDestroy()
     setPropertyFromClass('backend.ClientPrefs','data.splashAlpha',NotesAlpha)
