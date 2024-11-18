@@ -40,8 +40,8 @@ local CamScaleY = 1.03 -- Escala vertical (default 1.03)
 
 -- | Intro [Test] |
 local AnimMini = 2 -- Animaciones de entrada: 0 = normal, 2 = izquierda a derecha, 3 = derecha a izquierda, 4 = arriba a abajo, 5 = abajo a arriba, 6 Cara, 7 Centro.
-local colorMode = 2 -- 1 = solo un color, 2 = ajedrez, 3 = aleatorio, 4 = columnas de 2 colores, 5 = Random color custom.
-local singleColor = '000000' -- Color unico
+local ColorMode = 2 -- 1 = solo un color, 2 = ajedrez, 3 = aleatorio, 4 = columnas de 2 colores, 5 = Random color custom.
+local SingleColor = '000000' -- Color unico
 local color1 = 'FFFFFF' -- Color primario
 local color2 = '000000' -- Color secundario
 local customColors = {'000000','FFFFFF','FF0C00'} -- Random color Custom
@@ -170,6 +170,12 @@ local VariablesExtra = {
     {'CamerasScale',CamerasScale},
     {'CamScaleX',CamScaleX},
     {'CamScaleY',CamScaleY},
+    {'AnimMini',AnimMini},
+    {'ColorMode',ColorMode},
+    {'SingleColor',SingleColor},
+    {'color1',color1},
+    {'color2',color2},
+    {'customColors',customColors},
     {'healthOp',healthOp},
     {'QuitaV',QuitaV},
     {'LimiteDeVida',LimiteDeVida},
@@ -315,7 +321,7 @@ function ObjectOrderPost()
 end
 
 
-local size, cols, rows = 40, 32, 18
+local size,cols,rows = 40, 32, 18
 local facePixels = {
 {11,6},{12,6},{13,6},
 {11,7},{12,7},{13,7},            {17,7},{18,7},{19,7},
@@ -340,15 +346,15 @@ function onIntro()
                 end
             end
             if not isFacePixel then
-                if colorMode == 1 then
-                    color = singleColor
+                if ColorMode == 1 then
+                    color = SingleColor
                 elseif colorMode == 2 then
                     color = ((i + j) % 2 == 0) and color1 or color2
-                elseif colorMode == 3 then
+                elseif ColorMode == 3 then
                     color = string.format('%06X',math.random(0x000000, 0xFFFFFF))
-                elseif colorMode == 4 then
+                elseif ColorMode == 4 then
                     color = (i % 2 == 0) and color1 or color2
-                elseif colorMode == 5 then
+                elseif ColorMode == 5 then
                     color = customColors[math.random(#customColors)]
                 end
             end
@@ -397,7 +403,7 @@ local facePixels = {
 end
 function animateFromCenterOut()
     local centerX,centerY = 1280 / 2, 720 / 2
-    local baseTime,delayInc, alphaDelay = 0.03,0.002,0.1
+    local baseTime,delayInc,alphaDelay = 0.03,0.002,0.1
     local squares = {}
     for i = 0,cols - 1 do
         for j = 0,rows - 1 do
