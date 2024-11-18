@@ -39,6 +39,7 @@ local CamScaleY = 1.03 -- Escala vertical (default 1.03)
 
 
 -- | Intro |
+local IntroLua = true -- Activa una intro que se ve cuando inicia cualquier nivel (default false)
 local AnimMini = 2 -- Animaciones de entrada: 0 = normal, 2 = izquierda a derecha, 3 = derecha a izquierda, 4 = arriba a abajo, 5 = abajo a arriba, 6 Cara, 7 Centro. (default 2)
 local ColorMode = 2 -- 1 = solo un color, 2 = ajedrez, 3 = aleatorio, 4 = columnas de 2 colores, 5 = Random color custom. (default 2)
 local SingleColor = '000000' -- Color unico (default Hex 000000 (Negro))
@@ -171,6 +172,7 @@ local VariablesExtra = {
     {'CamerasScale',CamerasScale},
     {'CamScaleX',CamScaleX},
     {'CamScaleY',CamScaleY},
+    {'IntroLua',IntroLua},
     {'AnimMini',AnimMini},
     {'ColorMode',ColorMode},
     {'SingleColor',SingleColor},
@@ -253,13 +255,7 @@ function onSongStart()
         removeLuaText('ScoreMini')
         removeLuaText('MissesMini')
     end
-    if AnimMini == 6 then
-        animateSmileFace()
-    elseif AnimMini == 7 then
-        animateFromCenterOut()
-    else
-        standardAnimation()
-    end
+    onSongStartIntro()
 end
 function onCreate()
     makeLuaText('ScoreMini','0')
@@ -322,7 +318,7 @@ function ObjectOrderPost()
 end
 
 
-local size,cols,rows = 40, 32, 18
+local size,cols,rows = 40,32,18
 local facePixels = {
 {11,6},{12,6},{13,6},
 {11,7},{12,7},{13,7},            {17,7},{18,7},{19,7},
@@ -332,10 +328,11 @@ local facePixels = {
         {13,12},{14,12},{15,12},{16,12},{17,12}
 }
 function onIntro()
+    if IntroLua then
     for i = 0,cols - 1 do
         for j = 0,rows - 1 do
             local id = 'sq'..(i * rows + j)
-            local color = color2
+            local color = SingleColor
             local isFacePixel = false
             if AnimMini == 6 then
                 for _, pos in ipairs(facePixels) do
@@ -349,24 +346,36 @@ function onIntro()
             if not isFacePixel then
                 if ColorMode == 1 then
                     color = SingleColor
-                elseif colorMode == 2 then
+                elseif ColorMode == 2 then
                     color = ((i + j) % 2 == 0) and color1 or color2
                 elseif ColorMode == 3 then
-                    color = string.format('%06X',math.random(0x000000, 0xFFFFFF))
+                    color = string.format('%06X',math.random(0x000000,0xFFFFFF))
                 elseif ColorMode == 4 then
                     color = (i % 2 == 0) and color1 or color2
                 elseif ColorMode == 5 then
                     color = customColors[math.random(#customColors)]
                 end
             end
-           makeLuaSprite(id,nil,i * size,j * size)
-           makeGraphic(id,size,size,color)
-           if version == '1.0' then
-           setProperty(id..'.camera',instanceArg(CamIntro),false,true)
-           else
-           setObjectCamera(id,CamIntro)
-           end
-           addLuaSprite(id)
+            makeLuaSprite(id,nil,i * size,j * size)
+            makeGraphic(id,size,size,color)
+            if version == '1.0' then
+            setProperty(id..'.camera',instanceArg(CamIntro),false,true)
+            else
+            setObjectCamera(id,CamIntro)
+            end
+            addLuaSprite(id)
+        end
+    end
+    end
+end
+function onSongStartIntro()
+    if IntroLua then
+        if AnimMini == 6 then
+        animateSmileFace()
+        elseif AnimMini == 7 then
+        animateFromCenterOut()
+        else
+        standardAnimation()
         end
     end
 end
