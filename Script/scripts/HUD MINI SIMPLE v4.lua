@@ -38,13 +38,14 @@ local CamScaleX = 1.03 -- Escala horizontal (default 1.03)
 local CamScaleY = 1.03 -- Escala vertical (default 1.03)
 
 
--- | Intro [Test] |
-local AnimMini = 2 -- Animaciones de entrada: 0 = normal, 2 = izquierda a derecha, 3 = derecha a izquierda, 4 = arriba a abajo, 5 = abajo a arriba, 6 Cara, 7 Centro.
-local ColorMode = 2 -- 1 = solo un color, 2 = ajedrez, 3 = aleatorio, 4 = columnas de 2 colores, 5 = Random color custom.
-local SingleColor = '000000' -- Color unico
-local color1 = 'FFFFFF' -- Color primario
-local color2 = '000000' -- Color secundario
-local customColors = {'000000','FFFFFF','FF0C00'} -- Random color Custom
+-- | Intro |
+local AnimMini = 2 -- Animaciones de entrada: 0 = normal, 2 = izquierda a derecha, 3 = derecha a izquierda, 4 = arriba a abajo, 5 = abajo a arriba, 6 Cara, 7 Centro. (default 2)
+local ColorMode = 2 -- 1 = solo un color, 2 = ajedrez, 3 = aleatorio, 4 = columnas de 2 colores, 5 = Random color custom. (default 2)
+local SingleColor = '000000' -- Color unico (default Hex 000000 (Negro))
+local color1 = 'FFFFFF' -- Color primario (default Hex FFFFFF (Blanco))
+local color2 = '000000' -- Color secundario (default Hex 000000 (Negro))
+local customColors = {'000000','FFFFFF','FF0C00'} -- Random color Custom (default Hex {'000000','FFFFFF','FF0C00'})
+local CamIntro = 'camHUD' -- La cámara donde sera la Intro recomendable [camHUD o camOther] (default camHUD)
 
 
 -- | Configuración de reducción de salud del oponente |
@@ -84,8 +85,8 @@ local offset_gf = 25
 
 -- | Ángulos generales | [Recomendable usar zCameraFix para Psych Engine 0.7.x, 1.0 Pre y 1.0]
 -- angle: es cuánto se inclinara la cámara
-local angle_left = 5
-local angle_right = -5
+local angle_left = 3
+local angle_right = -3
 local angle_up = 0
 local angle_down = 0
 
@@ -358,11 +359,14 @@ function onIntro()
                     color = customColors[math.random(#customColors)]
                 end
             end
-
-            makeLuaSprite(id,nil,i * size,j * size)
-            makeGraphic(id,size,size,color)
-            setProperty(id..'.camera',instanceArg('camOther'),false,true)
-            addLuaSprite(id,true)
+           makeLuaSprite(id,nil,i * size,j * size)
+           makeGraphic(id,size,size,color)
+           if version == '1.0' then
+           setProperty(id..'.camera',instanceArg(CamIntro),false,true)
+           else
+           setObjectCamera(id,CamIntro)
+           end
+           addLuaSprite(id)
         end
     end
 end
@@ -439,7 +443,12 @@ function standardAnimation()
         end
     end
 end
-
+function onTimerCompletedIntro(t)
+    if t:find('_fade') then
+        local id = tag:gsub('_fade','')
+        doTweenAlpha(id..'_alpha',id,0,0.5)
+  end
+end
 local activeTexts = {}
 local maxTexts, textDuration,yOffsetStep,baseX,baseY,offsetXNewText = 6,5,25,0,200,400
 local eventCooldown = {}
@@ -491,10 +500,7 @@ function onTimerCompleted(t)
         local textTag = t:gsub('removeOldText','')
         removeLuaText(textTag,true)
     end
-    if t:find('_fade') then
-        local id = tag:gsub('_fade','')
-        doTweenAlpha(id..'_alpha',id,0,0.5)
-    end
+    onTimerCompletedIntro(t)
 end
 local ScoreActual = 0
 local timerUp,timerDown,incrementStageUp,incrementStageDown = 0,0,0,0
