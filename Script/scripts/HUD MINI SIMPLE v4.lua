@@ -17,7 +17,7 @@ local IconAnimExtra = false -- Animación extra para los iconos [default false]
 local MiddlescrollON = true -- HUD personalizado para middlescroll [default true]
 local MiddleScrollToggle = false -- Puedes denegar que se active el middlescroll [default false]
 local HideBotplayTxt = true -- Opción para ocultar el texto de botplay [default true]
-local CoverMode = false -- Activa el modo Cover donde todo el HUD MINI SIMPLE y algunas cosas mas se vuelve de una opacidad menor y se activa automáticamente el botplay [default false] [Test]
+local CoverMode = false -- Activa el modo Cover donde todo el HUD MINI SIMPLE y algunas cosas mas se vuelve de una opacidad menor y se activa automáticamente el botplay [default false]
 
 
 -- | ScoreMini |
@@ -58,7 +58,7 @@ local PocaVida = true -- El icono del bf parpadea cuando la vida es por debajo d
 
 -- | Configuración de CamFollow |
 local CustomCam = false -- Si quieres usar la poción de la cámara por defecto de los personajes (false) o personalizada (true) [default false] [beta]
-local FlipDadX = false -- Cuando FlipDadX esta en true, LEFT aumenta X y RIGHT la disminuye; de lo contrario, LEFT disminuye X y RIGHT la aumenta [default false] [Test]
+local FlipDadX = false -- Cuando FlipDadX esta en true, LEFT aumenta X y RIGHT la disminuye; de lo contrario, LEFT disminuye X y RIGHT la aumenta [default false]
 local IndividualOffsets = false -- Es para si quieres usar los Offsets por individual cada uno [default false]
 local GeneralOffset = 17 -- Reemplaza a los offsets de dad,boyfriend y gf si el IndividualOffsets está en false [default 17]
 local AngleSwitch = false -- Inclinar Cámara [default false]
