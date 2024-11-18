@@ -2,6 +2,7 @@
 Configuracion general.
 - Value 1, Value 2:
   - AS: AngleSwitch. Valores: true, false.
+  - CF: CameraSpeedOff, Valores: true, false
   - CS: Velocidad de la cámara. Valores: número.
   - FD: FlipDadX, Valores: true, false
   - FC: followCharacters. Valores: true, false.
