@@ -13,8 +13,8 @@ Este script te permite personalizar el HUD (la interfaz) en Psych Engine de form
 -- | True: Activado | false: Desactivado |
 
 -- | Ajustes de personalización |
-local IconAnim = true -- Animación de iconos [default true]
-local IconAnimExtra = false -- Animación extra para los iconos [default false]
+local IconAnim = false -- Animación de iconos [default false]
+local IconAnimExtra = true -- Animación extra para los iconos [default true]
 local MiddlescrollON = true -- HUD personalizado para middlescroll [default true]
 local MiddleScrollToggle = false -- Puedes denegar que se active el middlescroll [default false]
 local HideBotplayTxt = true -- Opción para ocultar el texto de botplay [default true]
