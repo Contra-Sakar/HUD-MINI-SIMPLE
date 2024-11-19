@@ -148,78 +148,6 @@ local function configureHUD()
     end
     setProperty('scoreTxt.visible',false)
 end
---[[
-    | Variables Extra |
-1. health | Obtiene la salud actual.
-
-2. iconP1Name | Obtiene el nombre del ícono de salud del personaje boyfriend.
-
-3. iconP2Name | Obtiene el nombre del ícono de salud del personaje dad.
-    Se agregaran mas varibles y útiles en un futuro por el momento esto es todo.
-]]
-local VariablesExtra = {
-    {'health',getHealth},
-    {'iconP1Name',function() return getProperty('boyfriend.healthIcon') end},
-    {'iconP2Name',function() return getProperty('dad.healthIcon') end},
-    {'IconAnim',IconAnim},
-    {'IconAnimExtra',IconAnimExtra},
-    {'MiddlescrollON',MiddlescrollON},
-    {'MiddleScrollToggle',MiddleScrollToggle},
-    {'HideBotplayTxt',HideBotplayTxt},
-    {'CoverMode',CoverMode},
-    {'ScoreTxtMini',ScoreTxtMini},
-    {'TimeScoreMini',TimeScoreMini},
-    {'ColorScoreMini',ColorScoreMini},
-    {'InfoEvent',InfoEvent},
-    {'TextoFont',TextoFont},
-    {'CamScale',CamScale},
-    {'CamerasScale',CamerasScale},
-    {'CamScaleX',CamScaleX},
-    {'CamScaleY',CamScaleY},
-    {'IntroLua',IntroLua},
-    {'AnimMini',AnimMini},
-    {'ColorMode',ColorMode},
-    {'SingleColor',SingleColor},
-    {'color1',color1},
-    {'color2',color2},
-    {'customColors',customColors},
-    {'healthOp',healthOp},
-    {'QuitaV',QuitaV},
-    {'LimiteDeVida',LimiteDeVida},
-    {'PocaVida',PocaVida},
-    {'CustomCam',CustomCam},
-    {'FlipDadX',FlipDadX},
-    {'IndividualOffsets',IndividualOffsets},
-    {'GeneralOffset',GeneralOffset},
-    {'AngleSwitch',AngleSwitch},
-    {'angleTime',angleTime},
-    {'followCharacters',followCharacters},
-    {'CemeraSpeedOff',CemeraSpeedOff},
-    {'cameraSpeed',cameraSpeed},
-    {'camX_opponent',camX_opponentEvent},
-    {'camY_opponent',camY_opponentEvent},
-    {'camX_player',camX_playerEvent},
-    {'camY_player',camY_playerEvent},
-    {'camX_gf',camX_gfEvent},
-    {'camY_gf',camY_gfEvent},
-    {'offset_opponent',offset_opponent},
-    {'offset_player',offset_player},
-    {'offset_gf',offset_gf},
-    {'angle_left',angle_left},
-    {'angle_right',angle_right},
-    {'angle_up',angle_up},
-    {'angle_down',angle_down}
-}
-function onVariables()
-    for _,VlE in ipairs(VariablesExtra) do
-        setOnScripts(VlE[1],type(VlE[2]) == 'function' and VlE[2]() or VlE[2])
-    end
-end
-function onVariablesUpdate(elapsed)
-    for _,VlE in ipairs(VariablesExtra) do
-        setOnScripts(VlE[1],type(VlE[2]) == 'function' and VlE[2]() or VlE[2])
-    end
-end
 local function animateIconsExtra(elapsed)
     if IconAnimExtra then
         setProperty('iconP1.scale.y',math.sin(elapsed * 0.5) * 0.05 + 1)
@@ -278,7 +206,6 @@ function onCreate()
     else
     setProperty('guitarHeroSustains',true)
     end
-    onVariables()
     defaultOptions()
     onIntro()
 end
@@ -327,7 +254,6 @@ function onCreatePost()
 end
 function onUpdate(elapsed)
     InfoEventUpdate(elapsed)
-    onVariablesUpdate(elapsed)
     CoverModeSplash()
 end
 function onUpdatePost(elapsed)
