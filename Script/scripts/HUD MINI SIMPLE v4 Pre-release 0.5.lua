@@ -288,7 +288,7 @@ function onIntro()
                     for _,pos in ipairs(facePixels) do
                         if pos[1] == i and pos[2] == j then
                             color = ColorFace
-                            isFace Pixel = true
+                            isFacePixel = true
                             break
                         end
                     end
