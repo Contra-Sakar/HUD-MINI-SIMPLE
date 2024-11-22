@@ -1,8 +1,8 @@
 --[[ 
 [Español]
-    |HUD MINI SIMPLE v4 Test | Psych Engine 0.6.3 -> 1.0 | |LuaXdea|
+    |HUD MINI SIMPLE v4 END | Psych Engine 0.6.3 -> 1.0 | |LuaXdea|
 
-Este script te permite personalizar el HUD (la interfaz) en Psych Engine de forma sencilla "Creo". Añade opciones como animación de los iconos, ajustes de la cámara y reducción de salud del oponente.
+Este script te permite personalizar el HUD (la interfaz) en Psych Engine de forma sencilla "Creo". Añade opciones como animación de los iconos, ajustes de la cámara y reducción de salud del oponente, entre otras cosas.
 
 [Youtube]: https://youtube.com/@lua-x-dea?si=vH4ommC_t3CGrDqn
 [Gamebanana]: https://gamebanana.com/mods/502653
@@ -59,7 +59,7 @@ local CamIntro = 'camHUD' -- La cámara donde sera la Intro recomendable (camHUD
 
 -- | Configuración de reducción de salud del oponente |
 local healthOp = true -- Activar o desactivar la reducción de salud [default true]
-local QuitaV = 0.03 -- Reducción de salud [default 0.012]
+local QuitaV = 0.013 -- Reducción de salud [default 0.013]
 local LimiteDeVida = 0.4 -- Reducción Maxima [default 0.4]
 local PocaVida = true -- El icono del bf parpadea cuando la vida es por debajo de 0.4 [default true]
 
@@ -69,8 +69,8 @@ local CustomCam = false -- Si quieres usar la poción de la cámara por defecto 
 local FlipDadX = false -- Cuando FlipDadX esta en true, LEFT aumenta X y RIGHT la disminuye; de lo contrario, LEFT disminuye X y RIGHT la aumenta [default false]
 local IndividualOffsets = false -- Es para si quieres usar los Offsets por individual cada uno [default false]
 local GeneralOffset = 17 -- Reemplaza a los offsets de dad,boyfriend y gf si el IndividualOffsets está en false [default 17]
-local AngleSwitch = true -- Inclinar Cámara [default false]
-local angleTime = 1 -- Velocidad de Angle [default 0.8]
+local AngleSwitch = true -- Inclinar Cámara [default true]
+local angleTime = 1 -- Velocidad de Angle [default 1]
 local followCharacters = true -- CamFollow [default true]
 local CameraSpeedOff = false -- Puedes desactivar el cameraSpeed en el script si ya tienes en otro script que ya hace lo mismo, es para evitar problemas si otro script esta usando el cameraSpeed [default false]
 local cameraSpeed = 1 -- Velocidad de CamFollow [default 1]
