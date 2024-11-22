@@ -32,11 +32,9 @@ local InfoEvent = false -- Te permite ver qué eventos se está usando en el mom
 local TextoFont = 'MAHAWA__.TTF' -- Aquí puedes elegir que fuente de letra quieres usar para el [InfoEvent] (default MAHAWA__.TTF)
 
 
--- | Escala de cámaras |
-local CamScale = false -- Es para aumentar la escala de las camaras (default false)
-local CamerasScale = {'camGame','camHUD','camOther'} -- Elige las camaras que quieres cambiar su escala (default {'camGame','camHUD','camOther'} )
-local CamScaleX = 1.03 -- Escala horizontal (default 1.03)
-local CamScaleY = 1.03 -- Escala vertical (default 1.03)
+-- | CameraFix |
+local CamFix = true -- Arregla las cámaras para que se puedan usar mejor (default false)
+local SpeedZoom = 0.1 -- Velocidad de Zoom [Recomendable de 0.05 a 0.5] (default 0.1)
 
 
 -- | Intro |
@@ -169,11 +167,15 @@ function onBeatHit()
         doTweenAlpha('iconP1AlphaNormal','iconP1',1,0.5)
     end
 end
-function onCamScale()
-    if CamScale then
-    for _,Cam in pairs(CamerasScale) do
-        setProperty(Cam..'.flashSprite.scaleX',CamScaleX)
-        setProperty(Cam..'.flashSprite.scaleY',CamScaleY)
+local CamGameZoomFix,CamHUDZoomFix = 1,1
+function onCamFix()
+    if CamFix then
+CamGameZoomFix = CamGameZoomFix + SpeedZoom * (getProperty('defaultCamZoom') - CamGameZoomFix)
+CamHUDZoomFix = CamHUDZoomFix + SpeedZoom * (1 - CamHUDZoomFix)
+    for _,Cam in pairs({'camGame','camHUD','camOther'}) do
+        setProperty(Cam..'.zoom',(Cam == 'camGame' and CamGameZoomFix or CamHUDZoomFix) / 2)
+        setProperty(Cam..'.flashSprite.scaleX',2)
+        setProperty(Cam..'.flashSprite.scaleY',2)
     end
     end
 end
@@ -258,7 +260,7 @@ function onUpdate(elapsed)
 end
 function onUpdatePost(elapsed)
     configureHUD()
-    onCamScale()
+    onCamFix()
     onCamFollowPos()
     ObjectOrderPost()
     animateIconsExtra(elapsed)
