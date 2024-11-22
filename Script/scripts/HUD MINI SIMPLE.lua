@@ -1,7 +1,8 @@
 --[[ 
 [Español]
     |HUD MINI SIMPLE v4 END | LuaXdea |
-    | Psych Engine 0.6.3 -> 1.0 | P-Slice Engine 1.2 -> 2.1 |
+    | Psych Engine 0.6.3 -> 1.0 |
+    | P-Slice Engine 1.2 -> 2.1 |
 
 Este script te permite personalizar el HUD (la interfaz) en Psych Engine de forma sencilla "Creo". Añade opciones como animación de los iconos, ajustes de la cámara y reducción de salud del oponente, entre otras cosas.
 
@@ -724,34 +725,18 @@ function onCamFollowPos()
             offset = IndividualOffsets and offset_gf or GeneralOffset
         end
         local anim = getProperty(character..'.animation.curAnim.name')
-        if FlipDadX and character == 'dad' then
             if anim:find('LEFT') then
-                x = x + offset
-                angle = angle_right
+                x = FlipDadX and character == 'dad' and x + offset or x - offset
+                angle = FlipDadX and character == 'dad' and angle_right or angle_left
             elseif anim:find('RIGHT') then
-                x = x - offset
-                angle = angle_left
+                x = FlipDadX and character == 'dad' and x - offset or x + offset
+                angle = FlipDadX and character == 'dad' and angle_left or angle_right
             elseif anim:find('UP') then
                 y = y - offset
                 angle = angle_up
             elseif anim:find('DOWN') then
                 y = y + offset
                 angle = angle_down
-            end
-        else
-            if anim:find('LEFT') then
-                x = x - offset
-                angle = angle_left
-            elseif anim:find('RIGHT') then
-                x = x + offset
-                angle = angle_right
-            elseif anim:find('UP') then
-                y = y - offset
-                angle = angle_up
-            elseif anim:find('DOWN') then
-                y = y + offset
-                angle = angle_down
-            end
         end
         setProperty('camFollow.x',x)
         setProperty('camFollow.y',y)
