@@ -1,8 +1,8 @@
 --[[ 
 [Español]
-    |HUD MINI SIMPLE v4 Pre-release 0.5 | Psych Engine 0.6.3 -> 1.0 | |LuaXdea|
+    |HUD MINI SIMPLE v4 Test | Psych Engine 0.6.3 -> 1.0 | |LuaXdea|
 
-Este script te permite personalizar el HUD (la interfaz) en Psych Engine de forma sencilla "Creo". Añade opciones como animación de los iconos, ajustes de la cámara y reducción de salud del oponente. Esta v4 es la última actualización por este mes se volvera a actualizar el script completo en fines de diciembre o inicios de enero del 2025.
+Este script te permite personalizar el HUD (la interfaz) en Psych Engine de forma sencilla "Creo". Añade opciones como animación de los iconos, ajustes de la cámara y reducción de salud del oponente.
 
 [Youtube]: https://youtube.com/@lua-x-dea?si=vH4ommC_t3CGrDqn
 [Gamebanana]: https://gamebanana.com/mods/502653
@@ -13,12 +13,17 @@ Este script te permite personalizar el HUD (la interfaz) en Psych Engine de form
 -- | True: Activado | false: Desactivado |
 
 -- | Ajustes de personalización |
-local IconAnim = false -- Animación de iconos [default false]
+local IconAnim = true -- Animación de iconos [default true]
 local IconAnimExtra = true -- Animación extra para los iconos [default true]
-local MiddlescrollON = true -- HUD personalizado para middlescroll [default true]
-local MiddleScrollToggle = false -- Puedes denegar que se active el middlescroll [default false]
 local HideBotplayTxt = true -- Opción para ocultar el texto de botplay [default true]
 local CoverMode = false -- Activa el modo Cover donde todo el HUD MINI SIMPLE y algunas cosas mas se vuelve de una opacidad menor y se activa automáticamente el botplay [default false]
+
+
+-- | Ajustes de Psych Engine |
+local MiddlescrollON = true -- HUD personalizado para middlescroll [default true]
+local MiddleScrollToggle = false -- Puedes denegar que se active el middlescroll [default false]
+local CamZoomingToggle = false -- Si se activa, la cámara no hace zoom (Dejará de funcionar el evento de Add Camera Zoom) [default false]
+local SkipCountdownToggle = false -- Quitas el conteo de inicio [default false]
 
 
 -- | ScoreMini |
@@ -29,29 +34,32 @@ local ColorScoreMini = '00FF00' -- El color que se volverá el ScoreMini cuando 
 
 -- | Ayuda de eventos |
 local InfoEvent = false -- Te permite ver qué eventos se está usando en el momento con su configuración de Value 1 y Value 2 [default false]
-local TextoFont = 'MAHAWA__.TTF' -- Aquí puedes elegir que fuente de letra quieres usar para el [InfoEvent] (default MAHAWA__.TTF)
+local TextoFont = 'MAHAWA__.TTF' -- Aquí puedes elegir que fuente de letra quieres usar para el (InfoEvent) [default MAHAWA__.TTF]
 
 
--- | CameraFix |
-local CamFix = true -- Arregla las cámaras para que se puedan usar mejor (default false)
-local SpeedZoom = 0.1 -- Velocidad de Zoom [Recomendable de 0.05 a 0.5] (default 0.1)
+-- | CameraFix | Reemplazo de zCameraFix |
+local CamFix = true -- Arregla las cámaras para que se puedan usar mejor [default true]
+local SpeedZoom = 0.1 -- Velocidad de Zoom [Recomendable de 0.05 a 0.5] [default 0.1]
+local CamFull = false -- Puedes hacer que se vea la cámara completa [default false]
+local CustomCamFix = 0 -- Puedes personalizar el tamaño de la camara requiere que CamFull este en false [default 0] (Test)
 
 
 -- | Intro |
-local IntroLua = true -- Activa una intro que se ve cuando inicia cualquier nivel (default false)
-local AnimMini = 2 -- Animaciones de entrada: 0 = normal, 2 = izquierda a derecha, 3 = derecha a izquierda, 4 = arriba a abajo, 5 = abajo a arriba, 6 = Cara, 7 = Centro. (default 2)
-local ColorMode = 2 -- 1 = solo un color, 2 = ajedrez, 3 = aleatorio, 4 = columnas de 2 colores, 5 = Random color custom. (default 2)
-local SingleColor = '000000' -- Color unico (default Hex 000000 (Negro))
-local color1 = 'FFFFFF' -- Color primario (default Hex FFFFFF (Blanco))
-local color2 = '000000' -- Color secundario (default Hex 000000 (Negro))
-local customColors = {'000000','FFFFFF','FF0C00'} -- Random color Custom (default Hex {'000000','FFFFFF','FF0C00'}) [Requiere ColorMode = 5]
-local ColorFace = 'CCCCCC' -- Puedes elegir el color que va ser la cara pixel (default Hex CCCCCC) [Requiere AnimMini = 6]
-local CamIntro = 'camHUD' -- La cámara donde sera la Intro recomendable [camHUD o camOther] (default camHUD)
+local IntroLua = true -- Activa una intro que se ve cuando inicia cualquier nivel [default false]
+local AnimMini = 1 -- Animaciones de entrada: 1 = normal, 2 = izquierda a derecha, 3 = derecha a izquierda, 4 = arriba a abajo, 5 = abajo a arriba, 6 = Cara, 7 = Centro, 8 = Especial. [default 1]
+local AnimTime = 0.5 -- El tiempo en que se hará la Intro [default 0.5]
+local ColorMode = 1 -- 1 = solo un color, 2 = ajedrez, 3 = aleatorio, 4 = columnas de 2 colores, 5 = Random color custom. [default 1]
+local SingleColor = '000000' -- Color unico [default Hex 000000 (Negro)]
+local color1 = 'FFFFFF' -- Color primario [default Hex FFFFFF (Blanco)]
+local color2 = '000000' -- Color secundario [default Hex 000000 (Negro)]
+local customColors = {'000000','FFFFFF','FF0C00'} -- Random color Custom [default Hex {'000000','FFFFFF','FF0C00'}] (Requiere ColorMode = 5)
+local ColorFace = 'CCCCCC' -- Puedes elegir el color que va ser la cara pixel [default Hex CCCCCC] (Requiere AnimMini = 6)
+local CamIntro = 'camHUD' -- La cámara donde sera la Intro recomendable (camHUD o camOther) [default camHUD]
 
 
 -- | Configuración de reducción de salud del oponente |
 local healthOp = true -- Activar o desactivar la reducción de salud [default true]
-local QuitaV = 0.012 -- Reducción de salud [default 0.012]
+local QuitaV = 0.03 -- Reducción de salud [default 0.012]
 local LimiteDeVida = 0.4 -- Reducción Maxima [default 0.4]
 local PocaVida = true -- El icono del bf parpadea cuando la vida es por debajo de 0.4 [default true]
 
@@ -61,10 +69,10 @@ local CustomCam = false -- Si quieres usar la poción de la cámara por defecto 
 local FlipDadX = false -- Cuando FlipDadX esta en true, LEFT aumenta X y RIGHT la disminuye; de lo contrario, LEFT disminuye X y RIGHT la aumenta [default false]
 local IndividualOffsets = false -- Es para si quieres usar los Offsets por individual cada uno [default false]
 local GeneralOffset = 17 -- Reemplaza a los offsets de dad,boyfriend y gf si el IndividualOffsets está en false [default 17]
-local AngleSwitch = false -- Inclinar Cámara [default false]
-local angleTime = 0.8 -- Velocidad de Angle [default 0.8]
+local AngleSwitch = true -- Inclinar Cámara [default false]
+local angleTime = 1 -- Velocidad de Angle [default 0.8]
 local followCharacters = true -- CamFollow [default true]
-local CameraSpeedOff = false -- Puedes desactivar el cameraSpeed en el script si ya tienes en otro script que ya hace lo mismo, es para evitar problemas si otro script esta usando el cameraSpeed (default false)
+local CameraSpeedOff = false -- Puedes desactivar el cameraSpeed en el script si ya tienes en otro script que ya hace lo mismo, es para evitar problemas si otro script esta usando el cameraSpeed [default false]
 local cameraSpeed = 1 -- Velocidad de CamFollow [default 1]
 
 -- | Posiciones de las cámaras | [Configurado para Test]
@@ -83,9 +91,9 @@ local camY_gf = 450
 -- Offset: Define hasta dónde puede desplazarse la cámara al seguir a los personajes.
 local offset_opponent = 20
 local offset_player = 20
-local offset_gf = 25
+local offset_gf = 20
 
--- | Ángulos generales | [Recomendable usar zCameraFix para Psych Engine 0.7.x, 1.0 Pre y 1.0]
+-- | Ángulos generales |
 -- angle: es cuánto se inclinara la cámara
 local angle_left = 3
 local angle_right = -3
@@ -146,6 +154,101 @@ local function configureHUD()
     end
     setProperty('scoreTxt.visible',false)
 end
+function onSettingsPE()
+    setProperty('camZooming',not CamZoomingToggle)
+    setProperty('skipCountdown',SkipCountdownToggle)
+end
+local staticVariables = {
+    {'IconAnim',IconAnim},
+    {'IconAnimExtra',IconAnimExtra},
+    {'HideBotplayTxt',HideBotplayTxt},
+    {'CoverMode',CoverMode},
+    {'MiddlescrollON',MiddlescrollON},
+    {'MiddleScrollToggle',MiddleScrollToggle},
+    {'CamZoomingToggle',CamZoomingToggle},
+    {'SkipCountdownToggle',SkipCountdownToggle},
+    {'ScoreTxtMini',ScoreTxtMini},
+    {'TimeScoreMini',TimeScoreMini},
+    {'ColorScoreMini',ColorScoreMini},
+    {'InfoEvent',InfoEvent},
+    {'TextoFont',TextoFont},
+    {'CamFix',CamFix},
+    {'SpeedZoom',SpeedZoom},
+    {'CamFull',CamFull},
+    {'CustomCamFix',CustomCamFix},
+    {'IntroLua',IntroLua},
+    {'AnimMini',AnimMini},
+    {'AnimTime',AnimTime},
+    {'ColorMode',ColorMode},
+    {'SingleColor',SingleColor},
+    {'color1',color1},
+    {'color2',color2},
+    {'customColors',customColors},
+    {'healthOp',healthOp},
+    {'QuitaV',QuitaV},
+    {'LimiteDeVida',LimiteDeVida},
+    {'PocaVida',PocaVida},
+    {'CustomCam',CustomCam},
+    {'FlipDadX',FlipDadX},
+    {'IndividualOffsets',IndividualOffsets},
+    {'GeneralOffset',GeneralOffset},
+    {'AngleSwitch',AngleSwitch},
+    {'angleTime',angleTime},
+    {'followCharacters',followCharacters},
+    {'CameraSpeedOff',CameraSpeedOff},
+    {'cameraSpeed',cameraSpeed},
+    {'camX_opponent',camX_opponentEvent},
+    {'camY_opponent',camY_opponentEvent},
+    {'camX_player',camX_playerEvent},
+    {'camY_player',camY_playerEvent},
+    {'camX_gf',camX_gfEvent},
+    {'camY_gf',camY_gfEvent},
+    {'offset_opponent',offset_opponent},
+    {'offset_player',offset_player},
+    {'offset_gf',offset_gf},
+    {'angle_left',angle_left},
+    {'angle_right',angle_right},
+    {'angle_up',angle_up},
+    {'angle_down',angle_down}
+}
+local dynamicVariables = {
+    {'health',function() return getHealth() end},
+    {'iconP1Name',function() return getProperty('boyfriend.healthIcon') end},
+    {'iconP2Name',function() return getProperty('dad.healthIcon') end},
+    {'ColorBarBF',function() return rgbToHex(rBF,gBF,bBF) end},
+    {'ColorBarDAD',function() return rgbToHex(rDad,gDad,bDad) end},
+}
+local cachedValues = {}
+function onVariables()
+    for _,VlE in ipairs(staticVariables) do
+        if cachedValues[VlE[1]] ~= VlE[2] then
+            cachedValues[VlE[1]] = VlE[2]
+            setOnScripts(VlE[1],VlE[2])
+        end
+    end
+    for _,VlE in ipairs(dynamicVariables) do
+        local newValue = VlE[2]()
+        if cachedValues[VlE[1]] ~= newValue then
+            cachedValues[VlE[1]] = newValue
+            setOnScripts(VlE[1],newValue)
+        end
+    end
+end
+function onVariablesUpdate()
+    for _,VlE in ipairs(staticVariables) do
+        if cachedValues[VlE[1]] ~= VlE[2] then
+            cachedValues[VlE[1]] = VlE[2]
+            setOnScripts(VlE[1],VlE[2])
+        end
+    end
+    for _,VlE in ipairs(dynamicVariables) do
+        local newValue = VlE[2]()
+        if cachedValues[VlE[1]] ~= newValue then
+            cachedValues[VlE[1]] = newValue
+            setOnScripts(VlE[1],newValue)
+        end
+    end
+end
 local function animateIconsExtra(elapsed)
     if IconAnimExtra then
         setProperty('iconP1.scale.y',math.sin(elapsed * 0.5) * 0.05 + 1)
@@ -180,7 +283,7 @@ CamHUDZoomFix = CamHUDZoomFix + SpeedZoom * (1 - CamHUDZoomFix)
     end
 end
 function opponentNoteHit()
-    if healthOp and health > LimiteDeVida then setHealth(health - QuitaV) end
+    if healthOp and getHealth() > LimiteDeVida then setHealth(getHealth() - QuitaV) end
 end
 function onSongStart()
     if not CoverMode and not getProperty('cpuControlled') then
@@ -193,6 +296,22 @@ function onSongStart()
     onSongStartIntro()
 end
 function onCreate()
+    for c = 1,2 do
+    makeLuaSprite('CamFixBar'..c,nil)
+    makeGraphic('CamFixBar'..c,1280,720,'000000')
+    if version == '1.0' then
+    setProperty('CamFixBar'..c..'.camera',instanceArg('camOther'),false,true)
+    else
+    setObjectCamera('CamFixBar'..c,'camOther')
+    end
+        if c == 1 then
+    setProperty('CamFixBar'..c..'.x',-1280 - math.abs(CustomCamFix))
+    elseif c == 2 then
+    setProperty('CamFixBar'..c..'.x',1280 + math.abs(CustomCamFix))
+    end
+    setProperty('CamFixBar'..c..'.visible',not CamFull)
+    addLuaSprite('CamFixBar'..c,true)
+    end
     makeLuaText('ScoreMini','0')
     setTextSize('ScoreMini',20)
     setProperty('ScoreMini.alpha',0)
@@ -209,7 +328,20 @@ function onCreate()
     setProperty('guitarHeroSustains',true)
     end
     defaultOptions()
+    onVariables()
     onIntro()
+    onColorBar()
+end
+function onColorBar()
+local rBF = getProperty('boyfriend.healthColorArray[0]')
+local gBF = getProperty('boyfriend.healthColorArray[1]')
+local bBF = getProperty('boyfriend.healthColorArray[2]')
+local rDad = getProperty('dad.healthColorArray[0]')
+local gDad = getProperty('dad.healthColorArray[1]')
+local bDad = getProperty('dad.healthColorArray[2]')
+end
+function rgbToHex(r,g,b)
+    return string.format("#%02X%02X%02X",r,g,b)
 end
 function defaultOptions()
     if version == '0.6.3' then
@@ -234,7 +366,7 @@ function defaultOptions()
 end
 function CoverModeSplash()
     for i = 0,getProperty('grpNoteSplashes.length') - 1 do
-setPropertyFromGroup('grpNoteSplashes',i,'alpha',CoverMode and 0.3 or SplashAlpha)
+    setPropertyFromGroup('grpNoteSplashes',i,'alpha',CoverMode and 0.3 or SplashAlpha)
     end
 end
 function onDestroy()
@@ -249,7 +381,7 @@ function onCreatePost()
     CamDefault()
     if CoverMode then
         for j = 0,7 do
-             setPropertyFromGroup('strumLineNotes',j,'alpha',0.5)
+            setPropertyFromGroup('strumLineNotes',j,'alpha',0.5)
             setPropertyFromGroup('unspawnNotes',j,'visible',false)
         end
     end
@@ -257,6 +389,7 @@ end
 function onUpdate(elapsed)
     InfoEventUpdate(elapsed)
     CoverModeSplash()
+    onVariablesUpdate()
 end
 function onUpdatePost(elapsed)
     configureHUD()
@@ -265,27 +398,30 @@ function onUpdatePost(elapsed)
     ObjectOrderPost()
     animateIconsExtra(elapsed)
     ScoreMiniPost(elapsed)
+    onSettingsPE()
 end
 function ObjectOrderPost()
     setObjectOrder('ScoreMini',getObjectOrder('scoreTxt') + 1)
     setObjectOrder('MissesMini',getObjectOrder('scoreTxt') + 1)
 end
-local size,cols,rows = 40,32,18
+local size,cols,rows = 40,40,18
+local offsetX = -145
 local facePixels = {
-{11,6},{12,6},{13,6},
-{11,7},{12,7},{13,7},            {17,7},{18,7},{19,7},
+{15,6},{16,6},{17,6},
+{15,7},{16,7},{17,7},            {21,7},{22,7},{23,7},
 
-{11,10},                                      {19,10},
-     {12,11},                              {18,11},
-        {13,12},{14,12},{15,12},{16,12},{17,12}
+{15,10},                                      {23,10},
+     {16,11},                              {22,11},
+        {17,12},{18,12},{19,12},{20,12},{21,12}
 }
+local centerX,centerY = (1920 / 2) + offsetX,720 / 2
 function onIntro()
     if IntroLua then
-        for i = 0,cols-1 do
-            for j=0,rows-1 do
-                local id ='sq'..(i*rows+j)
+        for i = 0,cols - 1 do
+            for j = 0,rows - 1 do
+                local id = 'sq'..(i * rows + j)
                 local color = SingleColor
-                local isFacePixel=false
+                local isFacePixel = false
                 if AnimMini == 6 then
                     for _,pos in ipairs(facePixels) do
                         if pos[1] == i and pos[2] == j then
@@ -299,18 +435,18 @@ function onIntro()
                     if ColorMode == 1 then
                         color = SingleColor
                     elseif ColorMode == 2 then
-                        color = ((i+j)%2 == 0)and color1 or color2
+                        color = ((i + j) % 2 == 0) and color1 or color2
                     elseif ColorMode == 3 then
-                        color = string.format('%06X',math.random(0x000000,0xFFFFFF))
+                        color = string.format('%06X', math.random(0x000000, 0xFFFFFF))
                     elseif ColorMode == 4 then
-                        color = (i%2 == 0)and color1 or color2
+                        color = (i % 2 == 0) and color1 or color2
                     elseif ColorMode == 5 then
                         color = customColors[math.random(#customColors)]
                     end
                 end
-                makeLuaSprite(id,nil,i*size,j*size)
+                makeLuaSprite(id,nil,i * size + offsetX,j * size)
                 makeGraphic(id,size,size,color)
-                if version == '1.0'then
+                if version == '1.0' then
                     setProperty(id..'.camera',instanceArg(CamIntro),false,true)
                 else
                     setObjectCamera(id,CamIntro)
@@ -326,13 +462,15 @@ function onSongStartIntro()
             animateSmileFace()
         elseif AnimMini == 7 then
             animateFromCenterOut()
+        elseif AnimMini == 8 then
+            animateForOnly()
         else
             standardAnimation()
         end
     end
 end
 function animateSmileFace()
-    local baseTime,delayInc,alphaDelay = 0.2,0.03,0.15
+    local baseTime,delayInc,alphaDelay = AnimTime,0.03,0.15
     for _,pos in ipairs(facePixels)do
         local id = 'sq'..(pos[1]*rows+pos[2])
         doTweenX(id..'_scX',id..'.scale',0.01,baseTime)
@@ -340,7 +478,7 @@ function animateSmileFace()
         runTimer(id..'_fade',alphaDelay)
     end
     for i = 0,cols-1 do
-        for j=0,rows-1 do
+        for j = 0,rows-1 do
             local id = 'sq'..(i*rows+j)
             local isFacePixel = false
             for _,pos in ipairs(facePixels)do
@@ -359,18 +497,17 @@ function animateSmileFace()
     end
 end
 function animateFromCenterOut()
-    local centerX,centerY = 1280 / 2,720 / 2
-    local baseTime,delayInc,alphaDelay = 1,0.003,0.1
+    local baseTime,delayInc,alphaDelay = AnimTime,0.002,0.1
     local squares = {}
-    for i = 0,cols-1 do
-        for j = 0,rows-1 do
-            local id = 'sq'..(i*rows+j)
-            local x,y = i*size + size / 2,j*size + size / 2
+    for i = 0,cols - 1 do
+        for j = 0,rows - 1 do
+            local id = 'sq'..(i * rows + j)
+            local x,y = i * size + size / 2 + offsetX + 200, j * size + size / 2
             local dist = math.sqrt((x - centerX)^2 + (y - centerY)^2)
-            table.insert(squares,{id = id,delay = dist*delayInc})
+            table.insert(squares,{id = id,delay = dist * delayInc})
         end
     end
-    for _,square in ipairs(squares)do
+    for _,square in ipairs(squares) do
         local scaleTime = baseTime + square.delay
         doTweenX(square.id..'_scX',square.id..'.scale',0.01,scaleTime)
         doTweenY(square.id..'_scY',square.id..'.scale',0.01,scaleTime)
@@ -378,17 +515,17 @@ function animateFromCenterOut()
     end
 end
 function standardAnimation()
-    local baseTime = (AnimMini == 0)and 0.5 or 0.15
-    local delayInc = (AnimMini == 0)and 0 or 0.03
-    local alphaDelay = (AnimMini == 0)and 0.15 or 0.07
-    local limit = (AnimMini<4)and 31 or 17
+    local baseTime = AnimTime
+    local delayInc = (AnimMini == 1)and 0 or 0.03
+    local alphaDelay = (AnimMini == 1)and 0.15 or 0.07
+    local limit = (AnimMini<4)and 40 or 18
     local isColumn = (AnimMini<4)
     local reverse = (AnimMini == 3)or(AnimMini == 5)
-    for i = 0,limit do
+    for i = 0,limit - 1 do
         local index = reverse and(limit - i)or i
         local delay = index*delayInc
         local scaleTime = baseTime+delay
-        for j = 0,(isColumn and 17 or 31)do
+        for j = 0,(isColumn and 18 or 40)do
             local id = 'sq'..(isColumn and(i*18 + j)or(j*18 + i))
             doTweenX(id..'_scX',id..'.scale',0.01,scaleTime)
             doTweenY(id..'_scY',id..'.scale',0.01,scaleTime)
@@ -396,13 +533,61 @@ function standardAnimation()
         end
     end
 end
+local squares = {}
+local activeSquares = {}
+local completedSquares = {}
+function animateForOnly()
+    for i = 0,cols - 1 do
+        for j = 0,rows - 1 do
+            local id = 'sq'..(i * rows + j)
+            local x,y = i * size + size / 2,j * size + size / 2
+            local dist = math.sqrt((x - centerX)^2 + (y - centerY)^2)
+            squares[id] = {id = id,x = x,y = y,dist = dist,active = false}
+        end
+    end
+    local sortedSquares = {}
+    for _,square in pairs(squares) do
+        table.insert(sortedSquares,square)
+    end
+    table.sort(sortedSquares,function(a,b) return a.dist < b.dist end)
+    for i = 1,4 do
+        startAnimation(sortedSquares[i])
+    end
+end
+function startAnimation(square)
+    square.active = true
+    activeSquares[square.id] = square
+    doTweenX(square.id..'_scX',square.id..'.scale',0.1,AnimTime,'smootherStepInOut')
+    doTweenY(square.id..'_scY',square.id..'.scale',0.1,AnimTime,'smootherStepInOut')
+    runTimer(square.id..'_next',AnimTime)
+    runTimer(square.id..'_fade',0.1)
+end
 function onTimerCompletedIntro(t)
-    if t:find('_fade')then
-        local id =t:gsub('_fade','')
+    local id = t:gsub('_(%w+)$','')
+    local action = t:match('_(%w+)$')
+    if action == "next" then
+    local square = activeSquares[id]
+    if not square then return end
+    activeSquares[id] = nil
+    completedSquares[id] = true
+    local neighbors = {}
+    for _,sq in pairs(squares) do
+        if not sq.active and not completedSquares[sq.id] then
+            local dx = math.abs(sq.x - square.x)
+            local dy = math.abs(sq.y - square.y)
+            if (dx == size and dy == 0) or (dy == size and dx == 0) then
+                table.insert(neighbors,sq)
+            end
+        end
+    end
+    table.sort(neighbors,function(a,b) return a.dist < b.dist end)
+    for i = 1,math.min(4,#neighbors) do
+        startAnimation(neighbors[i])
+    end
+    elseif action == "fade" then
         doTweenAlpha(id..'_alpha',id,0,0.5)
         runTimer(id..'_remove',0.5)
-    elseif t:find('_remove')then
-        local id = t:gsub('_remove','')
+    elseif action == "remove" then
         removeLuaSprite(id,true)
     end
 end
