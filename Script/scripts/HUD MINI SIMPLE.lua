@@ -56,7 +56,7 @@ local color1 = 'FFFFFF' -- Color primario [default Hex FFFFFF (Blanco)]
 local color2 = '000000' -- Color secundario [default Hex 000000 (Negro)]
 local customColors = {'000000','FFFFFF','FF0C00'} -- Random color Custom [default Hex {'000000','FFFFFF','FF0C00'}] (Requiere ColorMode = 5)
 local ColorFace = 'CCCCCC' -- Puedes elegir el color que va ser la cara pixel [default Hex CCCCCC] (Requiere AnimMini = 6)
-local CamIntro = 'camOther' -- La cámara donde sera la Intro recomendable (camHUD o camOther) [default camHUD]
+local CamIntro = 'camHUD' -- La cámara donde sera la Intro recomendable (camHUD o camOther) [default camHUD]
 
 
 -- | Configuración de reducción de salud del oponente |
