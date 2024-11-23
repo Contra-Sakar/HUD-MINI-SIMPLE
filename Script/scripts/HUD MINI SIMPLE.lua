@@ -1,6 +1,6 @@
 --[[ 
 [Español]
-    |HUD MINI SIMPLE v4 END | LuaXdea |
+    |HUD MINI SIMPLE v4.1 END | LuaXdea |
     | Psych Engine 0.6.3 -> 1.0 |
     | P-Slice Engine 1.2 -> 2.1 |
 
@@ -43,7 +43,7 @@ local TextoFont = 'MAHAWA__.TTF' -- Aquí puedes elegir que fuente de letra quie
 local CamFix = true -- Arregla las cámaras para que se puedan usar mejor [default true]
 local SpeedZoom = 0.1 -- Velocidad de Zoom [Recomendable de 0.05 a 0.5] [default 0.1]
 local CamFull = false -- Puedes hacer que se vea la cámara completa [default false]
-local CustomCamFix = 0 -- Puedes personalizar el tamaño de la camara requiere que CamFull este en false [default 0] (Test)
+local CustomCamFix = 0 -- Puedes personalizar el tamaño de la camara requiere que CamFull este en false [default 0]
 
 
 -- | Intro |
@@ -56,7 +56,7 @@ local color1 = 'FFFFFF' -- Color primario [default Hex FFFFFF (Blanco)]
 local color2 = '000000' -- Color secundario [default Hex 000000 (Negro)]
 local customColors = {'000000','FFFFFF','FF0C00'} -- Random color Custom [default Hex {'000000','FFFFFF','FF0C00'}] (Requiere ColorMode = 5)
 local ColorFace = 'CCCCCC' -- Puedes elegir el color que va ser la cara pixel [default Hex CCCCCC] (Requiere AnimMini = 6)
-local CamIntro = 'camHUD' -- La cámara donde sera la Intro recomendable (camHUD o camOther) [default camHUD]
+local CamIntro = 'camOther' -- La cámara donde sera la Intro recomendable (camHUD o camOther) [default camHUD]
 
 
 -- | Configuración de reducción de salud del oponente |
@@ -216,26 +216,9 @@ local staticVariables = {
 local dynamicVariables = {
     {'health',function() return getHealth() end},
     {'iconP1Name',function() return getProperty('boyfriend.healthIcon') end},
-    {'iconP2Name',function() return getProperty('dad.healthIcon') end},
-    {'ColorBarBF',function() return rgbToHex(rBF,gBF,bBF) end},
-    {'ColorBarDAD',function() return rgbToHex(rDad,gDad,bDad) end},
+    {'iconP2Name',function() return getProperty('dad.healthIcon') end}
 }
 local cachedValues = {}
-function onVariables()
-    for _,VlE in ipairs(staticVariables) do
-        if cachedValues[VlE[1]] ~= VlE[2] then
-            cachedValues[VlE[1]] = VlE[2]
-            setOnScripts(VlE[1],VlE[2])
-        end
-    end
-    for _,VlE in ipairs(dynamicVariables) do
-        local newValue = VlE[2]()
-        if cachedValues[VlE[1]] ~= newValue then
-            cachedValues[VlE[1]] = newValue
-            setOnScripts(VlE[1],newValue)
-        end
-    end
-end
 function onVariablesUpdate()
     for _,VlE in ipairs(staticVariables) do
         if cachedValues[VlE[1]] ~= VlE[2] then
@@ -330,20 +313,7 @@ function onCreate()
     setProperty('guitarHeroSustains',true)
     end
     defaultOptions()
-    onVariables()
     onIntro()
-    onColorBar()
-end
-function onColorBar()
-local rBF = getProperty('boyfriend.healthColorArray[0]')
-local gBF = getProperty('boyfriend.healthColorArray[1]')
-local bBF = getProperty('boyfriend.healthColorArray[2]')
-local rDad = getProperty('dad.healthColorArray[0]')
-local gDad = getProperty('dad.healthColorArray[1]')
-local bDad = getProperty('dad.healthColorArray[2]')
-end
-function rgbToHex(r,g,b)
-    return string.format("#%02X%02X%02X",r,g,b)
 end
 function defaultOptions()
     if version == '0.6.3' then
