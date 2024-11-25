@@ -1,6 +1,6 @@
 --[[ 
-[Español]
-    |HUD MINI SIMPLE v4.3 END | LuaXdea |
+[Spanish]
+    |HUD MINI SIMPLE v4.3 [Trake Update] END | LuaXdea |
     | Psych Engine 0.6.3 -> 1.0 |
     | P-Slice Engine 1.2 -> 2.1 |
 
@@ -835,9 +835,9 @@ function onEvent(n,v1,v2)
             FlipDadX = B
         elseif v1 == 'fc' then  -- followCharacters
             followCharacters = B
-        elseif v1 == 'io' then  -- IndividualOffsets
+        elseif v1 == 'io' then -- IndividualOffsets
             IndividualOffsets = B
-        elseif v1 == 'go' then  -- IndividualOffsets
+        elseif v1 == 'go' then  -- GeneralOffset
             GeneralOffset = tonumber(v2)
         elseif v1 == 'at' then  -- angleTime
             angleTime = tonumber(v2)
@@ -907,7 +907,7 @@ function onEvent(n,v1,v2)
     elseif n == 'CamFollowGf' then
         local isAdd = string.find(v1,'Add')
             if CustomCam then
-            if string.find(v1, 'x') then  -- camX_gf
+            if string.find(v1,'x') then  -- camX_gf
             if isAdd then
                 camX_gfEvent = tonumber(camX_gfEvent + v2)
             else
