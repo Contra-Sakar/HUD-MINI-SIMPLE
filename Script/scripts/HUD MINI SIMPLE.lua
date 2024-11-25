@@ -1,10 +1,12 @@
 --[[ 
 [Español]
-    |HUD MINI SIMPLE v4.1 END | LuaXdea |
+    |HUD MINI SIMPLE v4.3 END | LuaXdea |
     | Psych Engine 0.6.3 -> 1.0 |
     | P-Slice Engine 1.2 -> 2.1 |
 
-Este script te permite personalizar el HUD (la interfaz) en Psych Engine de forma sencilla "Creo". Añade opciones como animación de los iconos, ajustes de la cámara y reducción de salud del oponente, entre otras cosas.
+Este script te permite personalizar el HUD (la interfaz)
+en Psych Engine de forma sencilla 'Creo'. Añade opciones como animación de los iconos.
+Ajustes de la cámara y reducción de salud del oponente, entre otras cosas.
 
 [Youtube]: https://youtube.com/@lua-x-dea?si=vH4ommC_t3CGrDqn
 [Gamebanana]: https://gamebanana.com/mods/502653
@@ -15,10 +17,17 @@ Este script te permite personalizar el HUD (la interfaz) en Psych Engine de form
 -- | True: Activado | false: Desactivado |
 
 -- | Ajustes de personalización |
-local IconAnim = true -- Animación de iconos [default true]
-local IconAnimExtra = true -- Animación extra para los iconos [default true]
+local IconAnim = true -- Animación extra para los iconos [default true]
 local HideBotplayTxt = true -- Opción para ocultar el texto de botplay [default true]
 local CoverMode = false -- Activa el modo Cover donde todo el HUD MINI SIMPLE y algunas cosas mas se vuelve de una opacidad menor y se activa automáticamente el botplay [default false]
+
+
+-- | HUD |
+local TrakeHUD = false -- El HUD se personalizar como a usado el HUD Trake [default false]
+local FlipTrakeHUD = false -- Cambias la poción de las cosas del HUD a la izquierda [default false]
+local ColorBarVanilla = false -- Cambia el color de la barra de vida al FNF Base [default false]
+local HealthBarColorFix = true -- Si el color de la barra de vida del oponente y jugador son iguales o muy similares, se hará un pequeño retoque en el color para que no sean iguales [default true]
+local MiniNoteFixOpToggle = true -- Arregla las notas del oponente (Solo funciona cuando TrakeHUD está en true) [default true]
 
 
 -- | Ajustes de Psych Engine |
@@ -47,7 +56,7 @@ local CustomCamFix = 0 -- Puedes personalizar el tamaño de la camara requiere q
 
 
 -- | Intro |
-local IntroLua = true -- Activa una intro que se ve cuando inicia cualquier nivel [default false]
+local IntroLua = false -- Activa una intro que se ve cuando inicia cualquier nivel [default false]
 local AnimMini = 1 -- Animaciones de entrada: 1 = normal, 2 = izquierda a derecha, 3 = derecha a izquierda, 4 = arriba a abajo, 5 = abajo a arriba, 6 = Cara, 7 = Centro, 8 = Especial. [default 1]
 local AnimTime = 0.5 -- El tiempo en que se hará la Intro [default 0.5]
 local ColorMode = 1 -- 1 = solo un color, 2 = ajedrez, 3 = aleatorio, 4 = columnas de 2 colores, 5 = Random color custom. [default 1]
@@ -64,13 +73,14 @@ local healthOp = true -- Activar o desactivar la reducción de salud [default tr
 local QuitaV = 0.013 -- Reducción de salud [default 0.013]
 local LimiteDeVida = 0.4 -- Reducción Maxima [default 0.4]
 local PocaVida = true -- El icono del bf parpadea cuando la vida es por debajo de 0.4 [default true]
+local IconAngle = true -- El icon da una vuelta cuando está a poca vida [default true]
 
 
 -- | Configuración de CamFollow |
 local CustomCam = false -- Si quieres usar la poción de la cámara por defecto de los personajes (false) o personalizada (true) [default false] [beta]
 local FlipDadX = false -- Cuando FlipDadX esta en true, LEFT aumenta X y RIGHT la disminuye; de lo contrario, LEFT disminuye X y RIGHT la aumenta [default false]
 local IndividualOffsets = false -- Es para si quieres usar los Offsets por individual cada uno [default false]
-local GeneralOffset = 17 -- Reemplaza a los offsets de dad,boyfriend y gf si el IndividualOffsets está en false [default 17]
+local GeneralOffset = 20 -- Reemplaza a los offsets de dad,boyfriend y gf si el IndividualOffsets está en false [default 20]
 local AngleSwitch = true -- Inclinar Cámara [default true]
 local angleTime = 1 -- Velocidad de Angle [default 1]
 local followCharacters = true -- CamFollow [default true]
@@ -88,7 +98,7 @@ local camY_player = 600
 -- [Puede que el de gf no funcione en la versión 0.7.3]
 local camX_gf = 650
 local camY_gf = 450
-    
+
 -- | Offsets de las cámaras |
 -- Offset: Define hasta dónde puede desplazarse la cámara al seguir a los personajes.
 local offset_opponent = 20
@@ -102,6 +112,7 @@ local angle_right = -3
 local angle_up = 0
 local angle_down = 0
 
+
 local function configureHUD()
     if CoverMode then
         setProperty('comboGroup.alpha',0.2)
@@ -113,7 +124,7 @@ local function configureHUD()
             setPropertyFromGroup('unspawnNotes',j,'visible',false)
         end
     end
-    if not MiddleScrollToggle and MiddlescrollON and middlescroll then
+    if not TrakeHUD and not MiddleScrollToggle and MiddlescrollON and middlescroll then
         setProperty('iconP1.x',1120)
         setProperty('iconP1.y',downscroll and 590 or 0)
         setProperty('iconP2.x',10)
@@ -132,12 +143,30 @@ local function configureHUD()
         setProperty('ScoreMini.y',10)
         setProperty('MissesMini.x',10)
         setProperty('MissesMini.y',30)
-        setProperty('botplayTxt.visible',not HideBotplayTxt)
+    elseif TrakeHUD then
+        setProperty('iconP1.x',FlipTrakeHUD and 144 or 1100)
+        setProperty('iconP1.y',(FlipTrakeHUD and not downscroll) and 0 or 590)
+        setProperty('iconP2.x',FlipTrakeHUD and 20 or 960)
+        setProperty('iconP2.y',(FlipTrakeHUD and not downscroll) and 10 or 590)
+        setProperty('healthBar.x',FlipTrakeHUD and -140 or 800)
+        setProperty('healthBar.y',(FlipTrakeHUD and not downscroll) and 130 or 570)
+        setProperty('healthBar.scale.x',0.5)
+        setProperty('healthBarBG.scale.x',0.5)
+        setProperty('timeBar.x',FlipTrakeHUD and -105 or 835)
+        setProperty('timeBar.y',(FlipTrakeHUD and not downscroll) and 155 or 550)
+        setProperty('timeBar.scale.x',0.4)
+        setProperty('timeBarBG.scale.x',0.4)
+        setProperty('timeTxt.x',FlipTrakeHUD and 40 or 1000)
+        setProperty('timeTxt.y',(FlipTrakeHUD and not downscroll) and 147 or 540)
+        setProperty('ScoreMini.x',FlipTrakeHUD and 20 or 960)
+        setProperty('ScoreMini.y',(FlipTrakeHUD and not downscroll) and 175 or 525)
+        setProperty('MissesMini.x',FlipTrakeHUD and 20 or 960)
+        setProperty('MissesMini.y',(FlipTrakeHUD and not downscroll) and 195 or 505)
     else
         setProperty('iconP1.x',144)
         setProperty('iconP1.y',downscroll and 0 or 590)
         setProperty('iconP2.x',20)
-        setProperty('iconP2.y',downscroll and 0 or 590)
+        setProperty('iconP2.y',downscroll and 10 or 590)
         setProperty('healthBar.x',-140)
         setProperty('healthBar.y',downscroll and 130 or 570)
         setProperty('healthBar.scale.x',0.5)
@@ -147,14 +176,35 @@ local function configureHUD()
         setProperty('timeBar.scale.x',0.4)
         setProperty('timeBarBG.scale.x',0.4)
         setProperty('timeTxt.x',40)
-        setProperty('timeTxt.y',downscroll and 145 or 540)
+        setProperty('timeTxt.y',downscroll and 147 or 540)
         setProperty('ScoreMini.x',20)
         setProperty('ScoreMini.y',downscroll and 175 or 525)
         setProperty('MissesMini.x',20)
         setProperty('MissesMini.y',downscroll and 195 or 505)
-        setProperty('botplayTxt.visible',not HideBotplayTxt)
     end
+    setProperty('botplayTxt.visible',not HideBotplayTxt)
     setProperty('scoreTxt.visible',false)
+end
+function onHUDnotes()
+    if TrakeHUD then
+        for j = 0,3 do
+            setPropertyFromGroup('playerStrums',j,'y',downscroll and 570 or 50)
+            setPropertyFromGroup('opponentStrums',j,'y',downscroll and 50 or 570)
+            setPropertyFromGroup('opponentStrums',j,'direction',-90)
+        end
+    end
+end
+function MiniNoteFixOp()
+    if TrakeHUD and MiniNoteFixOpToggle then
+    for j = 0,getProperty('notes.length') -1 do
+        if not getPropertyFromGroup('notes',j,'mustPress') then
+            if getPropertyFromGroup('notes',j, 'isSustainNote') then
+            setPropertyFromGroup('notes',j,'angle',getPropertyFromGroup('opponentStrums',getPropertyFromGroup('notes',j, 'noteData'),'direction') - 90)
+        else
+            setPropertyFromGroup('notes',j,'angle',getPropertyFromGroup('opponentStrums',getPropertyFromGroup('notes',j, 'noteData'),'angle'))
+            end
+        end
+    end end
 end
 function onSettingsPE()
     setProperty('camZooming',not CamZoomingToggle)
@@ -162,9 +212,13 @@ function onSettingsPE()
 end
 local staticVariables = {
     {'IconAnim',IconAnim},
-    {'IconAnimExtra',IconAnimExtra},
     {'HideBotplayTxt',HideBotplayTxt},
     {'CoverMode',CoverMode},
+    {'TrakeHUD',TrakeHUD},
+    {'FlipTrakeHUD',FlipTrakeHUD},
+    {'ColorBarVanilla',ColorBarVanilla},
+    {'HealthBarColorFix',HealthBarColorFix},
+    {'MiniNoteFixOpToggle',MiniNoteFixOpToggle},
     {'MiddlescrollON',MiddlescrollON},
     {'MiddleScrollToggle',MiddleScrollToggle},
     {'CamZoomingToggle',CamZoomingToggle},
@@ -234,20 +288,13 @@ function onVariablesUpdate()
         end
     end
 end
-local function animateIconsExtra(elapsed)
-    if IconAnimExtra then
+local function animateIcons(elapsed)
+    if IconAnim then
         setProperty('iconP1.scale.y',math.sin(elapsed * 0.5) * 0.05 + 1)
         setProperty('iconP2.scale.y',math.cos(elapsed * 0.5) * 0.05 + 1)
     end
 end
 function onBeatHit()
-    if IconAnim then
-        local angle = curBeat % 2 == 0 and -9 or 9
-        setProperty('iconP1.angle',angle)
-        setProperty('iconP2.angle',-angle)
-        doTweenAngle('return1','iconP1',0,0.25 / playbackRate,'circOut')
-        doTweenAngle('return2','iconP2',0,0.25 / playbackRate,'circOut')
-    end
     if PocaVida and getProperty('health') < 0.4 then
         setProperty('iconP1.alpha',0.3)
         doTweenAlpha('iconP1Alpha','iconP1',1,0.4)
@@ -268,7 +315,19 @@ CamHUDZoomFix = CamHUDZoomFix + SpeedZoom * (1 - CamHUDZoomFix)
     end
 end
 function opponentNoteHit()
-    if healthOp and getHealth() > LimiteDeVida then setHealth(getHealth() - QuitaV) end
+    if healthOp and getHealth() > LimiteDeVida then
+        setHealth(getHealth() - QuitaV) end
+end
+local IconStart = false
+function AltUpdate()
+    if IconStart and IconAngle then
+        doTweenAngle('IconP1Angle','iconP1',health <= 0.4 and 360 or 0,0.2)
+        doTweenAngle('IconP2Angle','iconP2',health <= 1.6 and 0 or 360,0.2)
+    end
+    if ColorBarVanilla then
+        setHealthBarColors('FF0000','00FF00')
+        HealthBarColorFix = false
+    end
 end
 function onSongStart()
     if not CoverMode and not getProperty('cpuControlled') then
@@ -278,6 +337,7 @@ function onSongStart()
         removeLuaText('ScoreMini')
         removeLuaText('MissesMini')
     end
+    IconStart = true
     onSongStartIntro()
 end
 function onCreate()
@@ -306,7 +366,6 @@ function onCreate()
     setTextSize('MissesMini',20)
     setProperty('MissesMini.alpha',0)
     addLuaText('MissesMini')
-
     if healthOp then
     setProperty('guitarHeroSustains',false)
     else
@@ -351,6 +410,7 @@ function onDestroy()
 end
 function onCreatePost()
     CamDefault()
+    onHUDnotes()
     if CoverMode then
         for j = 0,7 do
             setPropertyFromGroup('strumLineNotes',j,'alpha',0.5)
@@ -362,19 +422,53 @@ function onUpdate(elapsed)
     InfoEventUpdate(elapsed)
     CoverModeSplash()
     onVariablesUpdate()
+    AltUpdate()
+    healthBarFix()
 end
 function onUpdatePost(elapsed)
     configureHUD()
     onCamFix()
     onCamFollowPos()
     ObjectOrderPost()
-    animateIconsExtra(elapsed)
+    animateIcons(elapsed)
     ScoreMiniPost(elapsed)
     onSettingsPE()
+    MiniNoteFixOp()
 end
 function ObjectOrderPost()
     setObjectOrder('ScoreMini',getObjectOrder('scoreTxt') + 1)
     setObjectOrder('MissesMini',getObjectOrder('scoreTxt') + 1)
+end
+function healthBarFix()
+    if HealthBarColorFix then
+    local rBF,gBF,bBF = unpack(getProperty('boyfriend.healthColorArray'))
+    local rDad,gDad,bDad = unpack(getProperty('dad.healthColorArray'))
+    if areColorsSimilar(rBF,gBF,bBF,rDad,gDad,bDad) then
+        local luminosityDad = calculateLuminosity(rDad,gDad,bDad)
+        local adjustedColor = adjustColor(rDad,gDad,bDad,luminosityDad)
+        setHealthBarColors(rgbToHex(adjustedColor),rgbToHex({rBF,gBF,bBF}))
+    end end
+end
+function areColorsSimilar(r1,g1,b1,r2,g2,b2)
+    local threshold = 50
+    return math.abs(r1 - r2) <= threshold and math.abs(g1 - g2) <= threshold and math.abs(b1 - b2) <= threshold
+end
+function calculateLuminosity(r,g,b)
+    return 0.299 * r + 0.587 * g + 0.114 * b
+end
+function adjustColor(r,g,b,luminosity)
+    local adjustment = (luminosity > 128) and -60 or 60
+    return {
+        clamp(r + adjustment,0,255),
+        clamp(g + adjustment,0,255),
+        clamp(b + adjustment,0,255)
+    }
+end
+function rgbToHex(color)
+    return string.format("0x%02X%02X%02X",color[1],color[2],color[3])
+end
+function clamp(value,min,max)
+    return math.max(min,math.min(max,value))
 end
 local size,cols,rows = 40,40,18
 local offsetX = -145
@@ -537,7 +631,7 @@ end
 function onTimerCompletedIntro(t)
     local id = t:gsub('_(%w+)$','')
     local action = t:match('_(%w+)$')
-    if action == "next" then
+    if action == 'next' then
     local square = activeSquares[id]
     if not square then return end
     activeSquares[id] = nil
@@ -556,17 +650,17 @@ function onTimerCompletedIntro(t)
     for i = 1,math.min(4,#neighbors) do
         startAnimation(neighbors[i])
     end
-    elseif action == "fade" then
+    elseif action == 'fade' then
         doTweenAlpha(id..'_alpha',id,0,0.5)
         runTimer(id..'_remove',0.5)
-    elseif action == "remove" then
+    elseif action == 'remove' then
         removeLuaSprite(id,true)
     end
 end
 local activeTexts = {}
 local maxTexts, textDuration,yOffsetStep,baseX,baseY,offsetXNewText = 6,5,25,0,200,400
 local eventCooldown = {}
-function customPrint(message)
+function luaPrint(message,ColorPrint)
     if #activeTexts >= maxTexts then
         local oldestText = table.remove(activeTexts,1)
         doTweenAlpha(oldestText.tag..'FadeQuick',oldestText.tag,0,0.15,'linear')
@@ -578,8 +672,8 @@ function customPrint(message)
     end
     makeLuaText(textTag,message,1000,baseX + offsetXNewText,baseY + 300)
     setTextSize(textTag,14)
-    setTextBorder(textTag,0.1,'000000')
-    setTextColor(textTag,'00FF00')
+    setTextBorder(textTag,0.3,'000000')
+    setTextColor(textTag,ColorPrint or 'FFFFFF')
     setTextAlignment(textTag,'left')
     setTextFont(textTag,TextoFont or 'vcr.ttf')
     setProperty(textTag..'.alpha',0)
@@ -669,9 +763,7 @@ function CamDefault()
     camY_gfEvent = CustomCam and camY_gf or camY_gfDefault
 end
 function onCamFollowPos()
-    if not CameraSpeedOff then
-    setProperty('cameraSpeed',cameraSpeed)
-    end
+if not CameraSpeedOff then setProperty('cameraSpeed',cameraSpeed) end
     if followCharacters then
         local character = 'dad'
         if gfSection then
@@ -721,7 +813,7 @@ function onEvent(n,v1,v2)
     if InfoEvent then
     if eventCooldown[n] and eventCooldown[n] > 0 then return end
     eventCooldown[n] = 0.2
-    customPrint('Event: '..n..(v1 ~= '' and '  Value1: '..v1 or '')..(v2 ~= '' and '  Value2: '..v2 or ''))
+    luaPrint('Event: '..n..(v1 ~= '' and '  Value1: '..v1 or '')..(v2 ~= '' and '  Value2: '..v2 or ''),'00FF00')
     end
     if v1 then v1 = string.lower(v1) end
     if n == 'CamFollowGeneral' or n == 'LifeDrain' then
