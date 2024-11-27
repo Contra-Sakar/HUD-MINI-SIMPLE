@@ -184,6 +184,7 @@ local function configureHUD()
     end
     setProperty('botplayTxt.visible',not HideBotplayTxt)
     setProperty('scoreTxt.visible',false)
+    setProperty('camZooming',not CamZoomingToggle)
 end
 function onHUDnotes()
     if TrakeHUD then
@@ -205,10 +206,6 @@ function MiniNoteFixOp()
             end
         end
     end end
-end
-function onSettingsPE()
-    setProperty('camZooming',not CamZoomingToggle)
-    setProperty('skipCountdown',SkipCountdownToggle)
 end
 local staticVariables = {
     {'IconAnim',IconAnim},
@@ -341,6 +338,7 @@ function onSongStart()
     onSongStartIntro()
 end
 function onCreate()
+    setProperty('skipCountdown',SkipCountdownToggle)
     for c = 1,2 do
     makeLuaSprite('CamFixBar'..c,nil)
     makeGraphic('CamFixBar'..c,1280,720,'000000')
@@ -432,7 +430,6 @@ function onUpdatePost(elapsed)
     ObjectOrderPost()
     animateIcons(elapsed)
     ScoreMiniPost(elapsed)
-    onSettingsPE()
     MiniNoteFixOp()
 end
 function ObjectOrderPost()
