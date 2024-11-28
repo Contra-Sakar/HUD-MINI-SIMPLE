@@ -23,7 +23,7 @@ local CoverMode = false -- Activa el modo Cover donde todo el HUD MINI SIMPLE y 
 
 
 -- | HUD |
-local TrakeHUD = false -- El HUD se personalizar como a usado el HUD Trake [default false]
+local TrakeHUD = true -- El HUD se personalizar como a usado el HUD Trake [default false]
 local FlipTrakeHUD = false -- Cambias la poción de las cosas del HUD a la izquierda [default false]
 local ColorBarVanilla = false -- Cambia el color de la barra de vida al FNF Base [default false]
 local HealthBarColorFix = true -- Si el color de la barra de vida del oponente y jugador son iguales o muy similares, se hará un pequeño retoque en el color para que no sean iguales [default true]
@@ -35,6 +35,7 @@ local MiddlescrollON = true -- HUD personalizado para middlescroll [default true
 local MiddleScrollToggle = false -- Puedes denegar que se active el middlescroll [default false]
 local CamZoomingToggle = false -- Si se activa, la cámara no hace zoom (Dejará de funcionar el evento de Add Camera Zoom) [default false]
 local SkipCountdownToggle = false -- Quitas el conteo de inicio [default false]
+local PauseToggle = false -- Podrás denegar que se pueda usar el modo pausa [default false]
 
 
 -- | ScoreMini |
@@ -44,7 +45,7 @@ local ColorScoreMini = '00FF00' -- El color que se volverá el ScoreMini cuando 
 
 
 -- | Ayuda de eventos |
-local InfoEvent = false -- Te permite ver qué eventos se está usando en el momento con su configuración de Value 1 y Value 2 [default false]
+local InfoEvent = true -- Te permite ver qué eventos se está usando en el momento con su configuración de Value 1 y Value 2 [default false]
 local TextoFont = 'MAHAWA__.TTF' -- Aquí puedes elegir que fuente de letra quieres usar para el (InfoEvent) [default MAHAWA__.TTF]
 
 
@@ -220,6 +221,7 @@ local staticVariables = {
     {'MiddleScrollToggle',MiddleScrollToggle},
     {'CamZoomingToggle',CamZoomingToggle},
     {'SkipCountdownToggle',SkipCountdownToggle},
+    {'PauseToggle',PauseToggle},
     {'ScoreTxtMini',ScoreTxtMini},
     {'TimeScoreMini',TimeScoreMini},
     {'ColorScoreMini',ColorScoreMini},
@@ -265,7 +267,7 @@ local staticVariables = {
     {'angle_down',angle_down}
 }
 local dynamicVariables = {
-    {'health',function() return getHealth() end},
+    {'health',function() return getProperty('health') end},
     {'iconP1Name',function() return getProperty('boyfriend.healthIcon') end},
     {'iconP2Name',function() return getProperty('dad.healthIcon') end}
 }
@@ -292,7 +294,7 @@ local function animateIcons(elapsed)
     end
 end
 function onBeatHit()
-    if PocaVida and getProperty('health') < 0.4 then
+    if PocaVida and health < 0.4 then
         setProperty('iconP1.alpha',0.3)
         doTweenAlpha('iconP1Alpha','iconP1',1,0.4)
     else
@@ -312,12 +314,11 @@ CamHUDZoomFix = CamHUDZoomFix + SpeedZoom * (1 - CamHUDZoomFix)
     end
 end
 function opponentNoteHit()
-    if healthOp and getHealth() > LimiteDeVida then
-        setHealth(getHealth() - QuitaV) end
+    if healthOp and health > LimiteDeVida then
+        setHealth(health - QuitaV) end
 end
-local IconStart = false
 function AltUpdate()
-    if IconStart and IconAngle then
+    if IconAngle then
         doTweenAngle('IconP1Angle','iconP1',health <= 0.4 and 360 or 0,0.2)
         doTweenAngle('IconP2Angle','iconP2',health <= 1.6 and 0 or 360,0.2)
     end
@@ -335,7 +336,12 @@ function onSongStart()
         removeLuaText('MissesMini')
     end
     IconStart = true
-    onSongStartIntro()
+    onStartIntro()
+end
+function onPause()
+    if PauseToggle then
+    return Function_Stop;
+    end
 end
 function onCreate()
     setProperty('skipCountdown',SkipCountdownToggle)
@@ -519,7 +525,7 @@ function onIntro()
         end
     end
 end
-function onSongStartIntro()
+function onStartIntro()
     if IntroLua then
         if AnimMini == 6 then
             animateSmileFace()
