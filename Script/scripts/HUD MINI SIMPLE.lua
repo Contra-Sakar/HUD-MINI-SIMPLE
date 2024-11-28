@@ -1,6 +1,6 @@
 --[[ 
 [Spanish]
-    |HUD MINI SIMPLE v4.3 [Trake Update] END | LuaXdea |
+    |HUD MINI SIMPLE v4.5 [BugFix] END | LuaXdea |
     | Psych Engine 0.6.3 -> 1.0 |
     | P-Slice Engine 1.2 -> 2.1 |
 
@@ -146,23 +146,33 @@ local function configureHUD()
         setProperty('MissesMini.y',30)
     elseif TrakeHUD then
         setProperty('iconP1.x',FlipTrakeHUD and 144 or 1100)
-        setProperty('iconP1.y',(FlipTrakeHUD and not downscroll) and 0 or 590)
         setProperty('iconP2.x',FlipTrakeHUD and 20 or 960)
-        setProperty('iconP2.y',(FlipTrakeHUD and not downscroll) and 10 or 590)
         setProperty('healthBar.x',FlipTrakeHUD and -140 or 800)
-        setProperty('healthBar.y',(FlipTrakeHUD and not downscroll) and 130 or 570)
         setProperty('healthBar.scale.x',0.5)
         setProperty('healthBarBG.scale.x',0.5)
         setProperty('timeBar.x',FlipTrakeHUD and -105 or 835)
-        setProperty('timeBar.y',(FlipTrakeHUD and not downscroll) and 155 or 550)
         setProperty('timeBar.scale.x',0.4)
         setProperty('timeBarBG.scale.x',0.4)
         setProperty('timeTxt.x',FlipTrakeHUD and 40 or 1000)
-        setProperty('timeTxt.y',(FlipTrakeHUD and not downscroll) and 147 or 540)
         setProperty('ScoreMini.x',FlipTrakeHUD and 20 or 960)
-        setProperty('ScoreMini.y',(FlipTrakeHUD and not downscroll) and 175 or 525)
         setProperty('MissesMini.x',FlipTrakeHUD and 20 or 960)
-        setProperty('MissesMini.y',(FlipTrakeHUD and not downscroll) and 195 or 505)
+        if FlipTrakeHUD then
+        setProperty('iconP1.y',not downscroll and 0 or 590)
+        setProperty('iconP2.y',not downscroll and 10 or 590)
+        setProperty('healthBar.y',not downscroll and 130 or 570)
+        setProperty('timeBar.y',not downscroll and 155 or 550)
+        setProperty('timeTxt.y',not downscroll and 147 or 540)
+        setProperty('ScoreMini.y',not downscroll and 175 or 525)
+        setProperty('MissesMini.y',not downscroll and 195 or 505)
+        else
+        setProperty('iconP1.y',downscroll and 0 or 590)
+        setProperty('iconP2.y',downscroll and 10 or 590)
+        setProperty('healthBar.y',downscroll and 130 or 570)
+        setProperty('timeBar.y',downscroll and 155 or 550)
+        setProperty('timeTxt.y',downscroll and 147 or 540)
+        setProperty('ScoreMini.y',downscroll and 175 or 525)
+        setProperty('MissesMini.y',downscroll and 195 or 505)
+        end
     else
         setProperty('iconP1.x',144)
         setProperty('iconP1.y',downscroll and 0 or 590)
