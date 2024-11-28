@@ -23,7 +23,7 @@ local CoverMode = false -- Activa el modo Cover donde todo el HUD MINI SIMPLE y 
 
 
 -- | HUD |
-local TrakeHUD = true -- El HUD se personalizar como a usado el HUD Trake [default false]
+local TrakeHUD = false -- El HUD se personalizar como a usado el HUD Trake [default false]
 local FlipTrakeHUD = false -- Cambias la poción de las cosas del HUD a la izquierda [default false]
 local ColorBarVanilla = false -- Cambia el color de la barra de vida al FNF Base [default false]
 local HealthBarColorFix = true -- Si el color de la barra de vida del oponente y jugador son iguales o muy similares, se hará un pequeño retoque en el color para que no sean iguales [default true]
@@ -45,7 +45,7 @@ local ColorScoreMini = '00FF00' -- El color que se volverá el ScoreMini cuando 
 
 
 -- | Ayuda de eventos |
-local InfoEvent = true -- Te permite ver qué eventos se está usando en el momento con su configuración de Value 1 y Value 2 [default false]
+local InfoEvent = false -- Te permite ver qué eventos se está usando en el momento con su configuración de Value 1 y Value 2 [default false]
 local TextoFont = 'MAHAWA__.TTF' -- Aquí puedes elegir que fuente de letra quieres usar para el (InfoEvent) [default MAHAWA__.TTF]
 
 
