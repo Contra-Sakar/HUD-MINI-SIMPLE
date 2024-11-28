@@ -2,7 +2,6 @@
 [Spanish]
     |HUD MINI SIMPLE v4.5 [BugFix] END | LuaXdea |
     | Psych Engine 0.6.3 -> 1.0 |
-    | P-Slice Engine 1.2 -> 2.1 |
 
 Este script te permite personalizar el HUD (la interfaz)
 en Psych Engine de forma sencilla 'Creo'. Añade opciones como animación de los iconos.
