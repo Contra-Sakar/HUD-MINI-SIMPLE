@@ -106,8 +106,8 @@ local offset_gf = 20
 
 -- | Ángulos generales |
 -- angle: es cuánto se inclinara la cámara
-local angle_left = 7
-local angle_right = -7
+local angle_left = 3
+local angle_right = -3
 local angle_up = 0
 local angle_down = 0
 
