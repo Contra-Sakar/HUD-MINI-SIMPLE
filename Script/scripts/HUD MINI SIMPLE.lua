@@ -1,7 +1,7 @@
 --[[ 
 [Spanish]
-    |HUD MINI SIMPLE v4.5 [BugFix] END | LuaXdea |
-    | Psych Engine 0.6.3 -> 1.0 |
+    |HUD MINI SIMPLE version[A1] END | LuaXdea |
+    | Psych Engine 0.7.2h |
 
 Este script te permite personalizar el HUD (la interfaz)
 en Psych Engine de forma sencilla 'Creo'. Añade opciones como animación de los iconos.
@@ -26,7 +26,6 @@ local TrakeHUD = false -- El HUD se personalizar como a usado el HUD Trake [defa
 local FlipTrakeHUD = false -- Cambias la poción de las cosas del HUD a la izquierda [default false]
 local ColorBarVanilla = false -- Cambia el color de la barra de vida al FNF Base [default false]
 local HealthBarColorFix = true -- Si el color de la barra de vida del oponente y jugador son iguales o muy similares, se hará un pequeño retoque en el color para que no sean iguales [default true]
-local MiniNoteFixOpToggle = true -- Arregla las notas del oponente (Solo funciona cuando TrakeHUD está en true) [default true]
 
 
 -- | Ajustes de Psych Engine |
@@ -49,7 +48,7 @@ local TextoFont = 'MAHAWA__.TTF' -- Aquí puedes elegir que fuente de letra quie
 
 
 -- | CameraFix | Reemplazo de zCameraFix |
-local CamFix = true -- Arregla las cámaras para que se puedan usar mejor [default true]
+local CamFix = false -- Arregla las cámaras para que se puedan usar mejor [default false]
 local SpeedZoom = 0.1 -- Velocidad de Zoom [Recomendable de 0.05 a 0.5] [default 0.1]
 local CamFull = false -- Puedes hacer que se vea la cámara completa [default false]
 local CustomCamFix = 0 -- Puedes personalizar el tamaño de la camara requiere que CamFull este en false [default 0]
@@ -77,11 +76,11 @@ local IconAngle = true -- El icon da una vuelta cuando está a poca vida [defaul
 
 
 -- | Configuración de CamFollow |
-local CustomCam = false -- Si quieres usar la poción de la cámara por defecto de los personajes (false) o personalizada (true) [default false] [beta]
+local CustomCam = false -- Si quieres usar la poción de la cámara por defecto de los personajes (false) o personalizada (true)
 local FlipDadX = false -- Cuando FlipDadX esta en true, LEFT aumenta X y RIGHT la disminuye; de lo contrario, LEFT disminuye X y RIGHT la aumenta [default false]
 local IndividualOffsets = false -- Es para si quieres usar los Offsets por individual cada uno [default false]
 local GeneralOffset = 20 -- Reemplaza a los offsets de dad,boyfriend y gf si el IndividualOffsets está en false [default 20]
-local AngleSwitch = true -- Inclinar Cámara [default true]
+local AngleSwitch = false -- Inclinar Cámara (Requiere CamFix) [default false]
 local angleTime = 1 -- Velocidad de Angle [default 1]
 local followCharacters = true -- CamFollow [default true]
 local CameraSpeedOff = false -- Puedes desactivar el cameraSpeed en el script si ya tienes en otro script que ya hace lo mismo, es para evitar problemas si otro script esta usando el cameraSpeed [default false]
@@ -107,8 +106,8 @@ local offset_gf = 20
 
 -- | Ángulos generales |
 -- angle: es cuánto se inclinara la cámara
-local angle_left = 3
-local angle_right = -3
+local angle_left = 7
+local angle_right = -7
 local angle_up = 0
 local angle_down = 0
 
@@ -117,10 +116,13 @@ local function configureHUD()
     if CoverMode then
         setProperty('comboGroup.alpha',0.2)
         setProperty('cpuControlled',true)
-    local CoverModeTabla = {'iconP1','iconP2','healthBar','healthBarBG','timeBar','timeBarBG','timeTxt'}
-        for _,ModeAlpha in pairs(CoverModeTabla) do setProperty(ModeAlpha..'.alpha',0.5) end
+        for _,ModeAlpha in pairs({'iconP1','iconP2','healthBar','timeBar','timeBarBG','timeTxt'}) do
+            setProperty(ModeAlpha..'.alpha',0.5)
+        end
         for j = 0,7 do
             setPropertyFromGroup('strumLineNotes',j,'alpha',0.5)
+        end
+        for j = 0,getProperty('unspawnNotes.length') - 1 do
             setPropertyFromGroup('unspawnNotes',j,'visible',false)
         end
     end
@@ -132,65 +134,34 @@ local function configureHUD()
         setProperty('healthBar.x',335)
         setProperty('healthBar.y',downscroll and 675 or 35)
         setProperty('healthBar.scale.x',0.5)
-        setProperty('healthBarBG.scale.x',0.5)
         setProperty('timeBar.x',380)
         setProperty('timeBar.y',downscroll and 695 or 13)
         setProperty('timeBar.scale.x',0.4)
-        setProperty('timeBarBG.scale.x',0.4)
         setProperty('timeTxt.x',500)
         setProperty('timeTxt.y',downscroll and 690 or 5)
         setProperty('ScoreMini.x',10)
         setProperty('ScoreMini.y',10)
         setProperty('MissesMini.x',10)
         setProperty('MissesMini.y',30)
-    elseif TrakeHUD then
-        setProperty('iconP1.x',FlipTrakeHUD and 144 or 1100)
-        setProperty('iconP2.x',FlipTrakeHUD and 20 or 960)
-        setProperty('healthBar.x',FlipTrakeHUD and -140 or 800)
-        setProperty('healthBar.scale.x',0.5)
-        setProperty('healthBarBG.scale.x',0.5)
-        setProperty('timeBar.x',FlipTrakeHUD and -105 or 835)
-        setProperty('timeBar.scale.x',0.4)
-        setProperty('timeBarBG.scale.x',0.4)
-        setProperty('timeTxt.x',FlipTrakeHUD and 40 or 1000)
-        setProperty('ScoreMini.x',FlipTrakeHUD and 20 or 960)
-        setProperty('MissesMini.x',FlipTrakeHUD and 20 or 960)
-        if FlipTrakeHUD then
-        setProperty('iconP1.y',not downscroll and 0 or 590)
-        setProperty('iconP2.y',not downscroll and 10 or 590)
-        setProperty('healthBar.y',not downscroll and 130 or 570)
-        setProperty('timeBar.y',not downscroll and 155 or 550)
-        setProperty('timeTxt.y',not downscroll and 147 or 540)
-        setProperty('ScoreMini.y',not downscroll and 175 or 525)
-        setProperty('MissesMini.y',not downscroll and 195 or 505)
-        else
-        setProperty('iconP1.y',downscroll and 0 or 590)
-        setProperty('iconP2.y',downscroll and 10 or 590)
-        setProperty('healthBar.y',downscroll and 130 or 570)
-        setProperty('timeBar.y',downscroll and 155 or 550)
-        setProperty('timeTxt.y',downscroll and 147 or 540)
-        setProperty('ScoreMini.y',downscroll and 175 or 525)
-        setProperty('MissesMini.y',downscroll and 195 or 505)
-        end
     else
-        setProperty('iconP1.x',144)
-        setProperty('iconP1.y',downscroll and 0 or 590)
-        setProperty('iconP2.x',20)
-        setProperty('iconP2.y',downscroll and 10 or 590)
-        setProperty('healthBar.x',-140)
-        setProperty('healthBar.y',downscroll and 130 or 570)
+    local flip = TrakeHUD and FlipTrakeHUD
+        setProperty('iconP1.x',flip and 144 or (TrakeHUD and 1100 or 144))
+        setProperty('iconP2.x',flip and 20 or (TrakeHUD and 960 or 20))
+        setProperty('healthBar.x',flip and -140 or (TrakeHUD and 800 or -140))
         setProperty('healthBar.scale.x',0.5)
-        setProperty('healthBarBG.scale.x',0.5)
-        setProperty('timeBar.x',-105)
-        setProperty('timeBar.y',downscroll and 155 or 550)
+        setProperty('timeBar.x',flip and -105 or (TrakeHUD and 835 or -105))
         setProperty('timeBar.scale.x',0.4)
-        setProperty('timeBarBG.scale.x',0.4)
-        setProperty('timeTxt.x',40)
-        setProperty('timeTxt.y',downscroll and 147 or 540)
-        setProperty('ScoreMini.x',20)
-        setProperty('ScoreMini.y',downscroll and 175 or 525)
-        setProperty('MissesMini.x',20)
-        setProperty('MissesMini.y',downscroll and 195 or 505)
+        setProperty('timeTxt.x',flip and 40 or (TrakeHUD and 1000 or 40))
+        setProperty('ScoreMini.x',flip and 20 or (TrakeHUD and 960 or 20))
+        setProperty('MissesMini.x',flip and 20 or (TrakeHUD and 960 or 20))
+    local yOffset = (flip and not downscroll) and {0,10,130,155,147,175,195} or (flip and downscroll) and {590,590,570,550,540,525,505} or downscroll and {0,10,130,155,147,175,195} or {590,590,570,550,540,525,505}
+        setProperty('iconP1.y',yOffset[1])
+        setProperty('iconP2.y',yOffset[2])
+        setProperty('healthBar.y',yOffset[3])
+        setProperty('timeBar.y',yOffset[4])
+        setProperty('timeTxt.y',yOffset[5])
+        setProperty('ScoreMini.y',yOffset[6])
+        setProperty('MissesMini.y',yOffset[7])
     end
     setProperty('botplayTxt.visible',not HideBotplayTxt)
     setProperty('scoreTxt.visible',false)
@@ -201,21 +172,13 @@ function onHUDnotes()
         for j = 0,3 do
             setPropertyFromGroup('playerStrums',j,'y',downscroll and 570 or 50)
             setPropertyFromGroup('opponentStrums',j,'y',downscroll and 50 or 570)
-            setPropertyFromGroup('opponentStrums',j,'direction',-90)
-        end
-    end
-end
-function MiniNoteFixOp()
-    if TrakeHUD and MiniNoteFixOpToggle then
-    for j = 0,getProperty('notes.length') -1 do
-        if not getPropertyFromGroup('notes',j,'mustPress') then
-            if getPropertyFromGroup('notes',j, 'isSustainNote') then
-            setPropertyFromGroup('notes',j,'angle',getPropertyFromGroup('opponentStrums',getPropertyFromGroup('notes',j, 'noteData'),'direction') - 90)
-        else
-            setPropertyFromGroup('notes',j,'angle',getPropertyFromGroup('opponentStrums',getPropertyFromGroup('notes',j, 'noteData'),'angle'))
+            if not downscroll then
+                setPropertyFromGroup('opponentStrums',j,'downScroll',true)
+            else
+                setPropertyFromGroup('opponentStrums',j,'downScroll',false)
             end
         end
-    end end
+    end
 end
 local staticVariables = {
     {'IconAnim',IconAnim},
@@ -225,7 +188,6 @@ local staticVariables = {
     {'FlipTrakeHUD',FlipTrakeHUD},
     {'ColorBarVanilla',ColorBarVanilla},
     {'HealthBarColorFix',HealthBarColorFix},
-    {'MiniNoteFixOpToggle',MiniNoteFixOpToggle},
     {'MiddlescrollON',MiddlescrollON},
     {'MiddleScrollToggle',MiddleScrollToggle},
     {'CamZoomingToggle',CamZoomingToggle},
@@ -296,18 +258,16 @@ function onVariablesUpdate()
         end
     end
 end
-local function animateIcons(elapsed)
+function animateIcons(elapsed)
     if IconAnim then
-        setProperty('iconP1.scale.y',math.sin(elapsed * 0.5) * 0.05 + 1)
-        setProperty('iconP2.scale.y',math.cos(elapsed * 0.5) * 0.05 + 1)
+        setProperty('iconP1.scale.y',1)
+        setProperty('iconP2.scale.y',1)
     end
 end
 function onBeatHit()
-    if PocaVida and health < 0.4 then
+    if PocaVida and getProperty('healthBar.percent') < 20 then
         setProperty('iconP1.alpha',0.3)
         doTweenAlpha('iconP1Alpha','iconP1',1,0.4)
-    else
-        doTweenAlpha('iconP1AlphaNormal','iconP1',1,0.5)
     end
 end
 local CamGameZoomFix,CamHUDZoomFix = 1,1
@@ -316,10 +276,10 @@ function onCamFix()
 CamGameZoomFix = CamGameZoomFix + SpeedZoom * (getProperty('defaultCamZoom') - CamGameZoomFix)
 CamHUDZoomFix = CamHUDZoomFix + SpeedZoom * (1 - CamHUDZoomFix)
     for _,Cam in pairs({'camGame','camHUD','camOther'}) do
-        setProperty(Cam..'.zoom',(Cam == 'camGame' and CamGameZoomFix or CamHUDZoomFix) / 2)
-        setProperty(Cam..'.flashSprite.scaleX',2)
-        setProperty(Cam..'.flashSprite.scaleY',2)
-    end
+            setProperty(Cam..'.zoom',(Cam == 'camGame' and CamGameZoomFix or CamHUDZoomFix) / 1.35)
+            setProperty(Cam..'.flashSprite.scaleX',1.35)
+            setProperty(Cam..'.flashSprite.scaleY',1.35)
+        end
     end
 end
 function opponentNoteHit()
@@ -328,8 +288,8 @@ function opponentNoteHit()
 end
 function AltUpdate()
     if IconAngle then
-        doTweenAngle('IconP1Angle','iconP1',health <= 0.4 and 360 or 0,0.2)
-        doTweenAngle('IconP2Angle','iconP2',health <= 1.6 and 0 or 360,0.2)
+        doTweenAngle('IconP1Angle','iconP1',getProperty('healthBar.percent') < 20 and 360 or 0,0.2)
+        doTweenAngle('IconP2Angle','iconP2',getProperty('healthBar.percent') > 80 and 0 or 360,0.2)
     end
     if ColorBarVanilla then
         setHealthBarColors('FF0000','00FF00')
@@ -344,6 +304,7 @@ function onSongStart()
         removeLuaText('ScoreMini')
         removeLuaText('MissesMini')
     end
+    luaPrint((AngleSwitch and not CamFix) and 'AngleSwitch: require = CamFix' or nil,'FF0000')
     IconStart = true
     onStartIntro()
 end
@@ -357,16 +318,8 @@ function onCreate()
     for c = 1,2 do
     makeLuaSprite('CamFixBar'..c,nil)
     makeGraphic('CamFixBar'..c,1280,720,'000000')
-    if version == '1.0' then
-    setProperty('CamFixBar'..c..'.camera',instanceArg('camOther'),false,true)
-    else
     setObjectCamera('CamFixBar'..c,'camOther')
-    end
-        if c == 1 then
-    setProperty('CamFixBar'..c..'.x',-1280 - math.abs(CustomCamFix))
-    elseif c == 2 then
-    setProperty('CamFixBar'..c..'.x',1280 + math.abs(CustomCamFix))
-    end
+    setProperty('CamFixBar'..c..'.x',(c == 1) and -1280 - math.abs(CustomCamFix) or 1280 + math.abs(CustomCamFix))
     setProperty('CamFixBar'..c..'.visible',not CamFull)
     addLuaSprite('CamFixBar'..c,true)
     end
@@ -380,24 +333,17 @@ function onCreate()
     setProperty('MissesMini.alpha',0)
     addLuaText('MissesMini')
     if healthOp then
-    setProperty('guitarHeroSustains',false)
+        setProperty('guitarHeroSustains',false)
     else
-    setProperty('guitarHeroSustains',true)
+        setProperty('guitarHeroSustains',true)
+    end
+    if TrakeHUD then
+        MiddleScrollToggle = true
     end
     defaultOptions()
     onIntro()
 end
 function defaultOptions()
-    if version == '0.6.3' then
-    MiddlescrollDefault = getPropertyFromClass('ClientPrefs','middleScroll')
-    SplashAlpha = getPropertyFromGroup('grpNoteSplashes',0,'alpha')
-    if MiddleScrollToggle then
-    setPropertyFromClass('ClientPrefs','middleScroll',false)
-    else
-    setPropertyFromClass('ClientPrefs','middleScroll',MiddlescrollDefault)
-    end
-    setProperty('grpNoteSplashes.alpha',CoverMode and 0.3 or SplashAlpha)
-    else
     MiddlescrollDefault = getPropertyFromClass('backend.ClientPrefs','data.middleScroll')
     SplashAlpha = getPropertyFromClass('backend.ClientPrefs','data.splashAlpha')
     if MiddleScrollToggle then
@@ -406,7 +352,6 @@ function defaultOptions()
     setPropertyFromClass('backend.ClientPrefs','data.middleScroll',MiddlescrollDefault)
     end
     setPropertyFromClass('backend.ClientPrefs','data.splashAlpha',CoverMode and 0.3 or SplashAlpha)
-    end
 end
 function CoverModeSplash()
     for i = 0,getProperty('grpNoteSplashes.length') - 1 do
@@ -414,12 +359,8 @@ function CoverModeSplash()
     end
 end
 function onDestroy()
-    if version == '0.6.3' then
-    setPropertyFromClass('ClientPrefs','middleScroll',MiddlescrollDefault)
-    else
     setPropertyFromClass('backend.ClientPrefs','data.splashAlpha',SplashAlpha)
     setPropertyFromClass('backend.ClientPrefs','data.middleScroll',MiddlescrollDefault)
-    end
 end
 function onCreatePost()
     CamDefault()
@@ -445,7 +386,6 @@ function onUpdatePost(elapsed)
     ObjectOrderPost()
     animateIcons(elapsed)
     ScoreMiniPost(elapsed)
-    MiniNoteFixOp()
 end
 function ObjectOrderPost()
     setObjectOrder('ScoreMini',getObjectOrder('scoreTxt') + 1)
@@ -524,11 +464,7 @@ function onIntro()
                 end
                 makeLuaSprite(id,nil,i * size + offsetX,j * size)
                 makeGraphic(id,size,size,color)
-                if version == '1.0' then
-                    setProperty(id..'.camera',instanceArg(CamIntro),false,true)
-                else
-                    setObjectCamera(id,CamIntro)
-                end
+                setObjectCamera(id,CamIntro)
                 addLuaSprite(id)
             end
         end
@@ -678,7 +614,7 @@ function luaPrint(message,ColorPrint)
         doTweenAlpha(oldestText.tag..'FadeQuick',oldestText.tag,0,0.15,'linear')
         runTimer('removeOldText'..oldestText.tag,0.15)
     end
-    local textTag = 'customText'..math.random(10000)
+    local textTag = 'customText'..(function() counter = (counter or 0) + 1; return counter end)()
     for i, textData in ipairs(activeTexts) do
         doTweenY(textData.tag..'MoveDown',textData.tag,baseY + (i * yOffsetStep),0.3,'linear')
     end
@@ -689,11 +625,7 @@ function luaPrint(message,ColorPrint)
     setTextAlignment(textTag,'left')
     setTextFont(textTag,TextoFont or 'vcr.ttf')
     setProperty(textTag..'.alpha',0)
-    if version == '1.0' then
-    setProperty(textTag..'.camera',instanceArg('camOther'),false,true)
-    else
     setObjectCamera(textTag,'camOther')
-    end
     addLuaText(textTag)
     doTweenAlpha(textTag..'FadeIn',textTag,1,0.15,'linear')
     doTweenX(textTag..'MoveIn',textTag,baseX,0.15,'linear')
@@ -760,19 +692,13 @@ function ScoreMiniPost(elapsed)
 end
 function CamDefault()
     if not CustomCam then
-    camX_playerDefault = getMidpointX('boyfriend') - getProperty('boyfriend.cameraPosition[0]') - getProperty('boyfriendCameraOffset[0]') - 100
-    camY_playerDefault = getMidpointY('boyfriend') + getProperty('boyfriend.cameraPosition[1]') + getProperty('boyfriendCameraOffset[1]') - 100
-    camX_opponentDefault = getMidpointX('dad') + getProperty('dad.cameraPosition[0]') + getProperty('opponentCameraOffset[0]') + 150
-    camY_opponentDefault = getMidpointY('dad') + getProperty('dad.cameraPosition[1]') + getProperty('opponentCameraOffset[1]') - 100
-    camX_gfDefault = getMidpointX('gf') + getProperty('gf.cameraPosition[0]') + getProperty('girlfriendCameraOffset[0]')
-    camY_gfDefault = getMidpointY('gf') + getProperty('gf.cameraPosition[1]') + getProperty('girlfriendCameraOffset[1]')
+        camX_player= getMidpointX('boyfriend') - 100
+        camY_player = getMidpointY('boyfriend') - 100
+        camX_opponent = getMidpointX('dad') + 150
+        camY_opponent = getMidpointY('dad') - 100
+        camX_gf = getMidpointX('gf')
+        camY_gf = getMidpointY('gf')
     end
-    camX_opponentEvent = CustomCam and camX_opponent or camX_opponentDefault
-    camY_opponentEvent = CustomCam and camY_opponent or camY_opponentDefault
-    camX_playerEvent = CustomCam and camX_player or camX_playerDefault
-    camY_playerEvent = CustomCam and camY_player or camY_playerDefault
-    camX_gfEvent = CustomCam and camX_gf or camX_gfDefault
-    camY_gfEvent = CustomCam and camY_gf or camY_gfDefault
 end
 function onCamFollowPos()
 if not CameraSpeedOff then setProperty('cameraSpeed',cameraSpeed) end
@@ -789,13 +715,13 @@ if not CameraSpeedOff then setProperty('cameraSpeed',cameraSpeed) end
         end
         local x,y,offset,angle = 0,0,0,0
         if character == 'dad' then
-            x,y = camX_opponentEvent,camY_opponentEvent
+            x,y = camX_opponent,camY_opponent
             offset = IndividualOffsets and offset_opponent or GeneralOffset
         elseif character == 'boyfriend' then
-            x,y = camX_playerEvent,camY_playerEvent
+            x,y = camX_player,camY_player
             offset = IndividualOffsets and offset_player or GeneralOffset
         elseif character == 'gf' then
-            x,y = camX_gfEvent,camY_gfEvent
+            x,y = camX_gf,camY_gf
             offset = IndividualOffsets and offset_gf or GeneralOffset
         end
         local anim = getProperty(character..'.animation.curAnim.name')
@@ -814,11 +740,7 @@ if not CameraSpeedOff then setProperty('cameraSpeed',cameraSpeed) end
         end
         setProperty('camFollow.x',x)
         setProperty('camFollow.y',y)
-        if AngleSwitch then
-            doTweenAngle('camGameAngle','camGame',angle,angleTime)
-        else
-            doTweenAngle('camGameAngle','camGame',0,angleTime)
-        end
+        doTweenAngle('camGameAngle','camGame',(AngleSwitch and CamFix) and angle or 0,angleTime)
     end
 end
 function onEvent(n,v1,v2)
